@@ -61,7 +61,7 @@ $(BDIR)/%  : $(ODIR)/%.o
 ###############################################################################
 ############################# Main Targets ####################################
 ###############################################################################
-all : $(BDIR)/pp_correlation
+all : $(BDIR)/star_pp_correlation
 
 $(SDIR)/dict.cxx                : $(SDIR)/ktTrackEff.hh
 	cd ${SDIR}; rootcint6 -f dict.cxx -c -I. ./ktTrackEff.hh
@@ -70,10 +70,10 @@ $(ODIR)/dict.o                  : $(SDIR)/dict.cxx
 $(ODIR)/ktTrackEff.o            : $(SDIR)/ktTrackEff.cxx $(SDIR)/ktTrackEff.hh
 $(ODIR)/starFunctions.o		: $(SDIR)/starFunctions.cxx $(SDIR)/starFunctions.hh
 
-$(ODIR)/pp_correlation.o	: $(SDIR)/pp_correlation.cxx
+$(ODIR)/star_pp_correlation.o	: $(SDIR)/star_pp_correlation.cxx
 
 #data analysis
-$(BDIR)/pp_correlation			: $(ODIR)/pp_correlation.o	$(ODIR)/starFunctions.o $(ODIR)/ktTrackEff.o $(ODIR)/dict.o
+$(BDIR)/star_pp_correlation			: $(ODIR)/star_pp_correlation.o	$(ODIR)/starFunctions.o $(ODIR)/ktTrackEff.o $(ODIR)/dict.o
 
 
 ###############################################################################
