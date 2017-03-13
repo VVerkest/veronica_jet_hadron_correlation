@@ -1,4 +1,29 @@
-// ROOT Headers
+// STL 
+#include <stdio.h>
+#include <stdlib.h>
+#include <sstream>
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <vector>
+#include <string>
+#include <limits.h>
+#include <unistd.h>
+
+// fastjet 3
+#include "fastjet/PseudoJet.hh"
+#include "fastjet/ClusterSequence.hh"
+#include "fastjet/ClusterSequenceArea.hh"
+#include "fastjet/ClusterSequencePassiveArea.hh"
+#include "fastjet/ClusterSequenceActiveArea.hh"
+#include "fastjet/ClusterSequenceActiveAreaExplicitGhosts.hh"
+#include "fastjet/Selector.hh"
+#include "fastjet/tools/JetMedianBackgroundEstimator.hh"
+#include "fastjet/tools/Subtractor.hh"
+#include "fastjet/tools/Filter.hh"
+#include "fastjet/FunctionOfPseudoJet.hh"
+
+// ROOT
 #include "TH1.h"
 #include "TH2.h"
 #include "TH3.h"
@@ -15,27 +40,10 @@
 #include "TBranch.h"
 #include "TMath.h"
 #include "TRandom.h"
-#include "TRandom3.h"
 #include "TCanvas.h"
 #include "TStopwatch.h"
 
-// STL Headers
-#include <stdio.h>
-#include <stdlib.h>
-#include <sstream>
-#include <iostream>
-#include <fstream>
-#include <cstring>
-#include <algorithm>
-#include <cstring>
-#include <vector>
-#include <string>
-#include <limits.h>
-#include <unistd.h>
-
-// Data is read in by TStarJetPico
-// Library, we convert to FastJet::PseudoJet
-// TStarJetPico headers
+// TStarJetPico
 #include "TStarJetPicoReader.h"
 #include "TStarJetPicoEvent.h"
 #include "TStarJetPicoEventHeader.h"
@@ -48,22 +56,3 @@
 #include "TStarJetVector.h"
 #include "TStarJetPicoTriggerInfo.h"
 #include "TStarJetPicoUtils.h"
-
-// The analysis is run on FastJet::PseudoJets
-// We make use of the jetfinding tools
-// And the convenient FastJet::Selectors
-#include "fastjet/PseudoJet.hh"
-#include "fastjet/ClusterSequence.hh"
-#include "fastjet/ClusterSequenceArea.hh"
-#include "fastjet/ClusterSequencePassiveArea.hh"
-#include "fastjet/ClusterSequenceActiveArea.hh"
-#include "fastjet/ClusterSequenceActiveAreaExplicitGhosts.hh"
-#include "fastjet/Selector.hh"
-#include "fastjet/tools/JetMedianBackgroundEstimator.hh"
-#include "fastjet/tools/Subtractor.hh"
-#include "fastjet/tools/Filter.hh"
-#include "fastjet/FunctionOfPseudoJet.hh"
-
-// Used for year 7 tracking efficiency corrections,
-// if they are being used
-#include "ktTrackEff.hh"
