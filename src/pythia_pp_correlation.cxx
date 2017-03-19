@@ -4,6 +4,7 @@
 
 #include "corrFunctions.hh"  // functions for correlation
 #include "corrParameters.hh"
+#include "include.h"
 // -------------------------
 // Command line arguments: ( Defaults
 // Defined for debugging in main )

@@ -4,6 +4,7 @@
 
 #include "corrFunctions.hh"  // functions for correlation
 #include "corrParameters.hh"
+#include "include.h"
 // -------------------------
 // Command line arguments: ( Defaults
 // Defined for debugging in main )
@@ -153,6 +154,8 @@ int main ( int argc, const char** argv) {
   // --------------------------------------
   TStarJetPicoReader reader;
   corrAnalysis::InitReader( reader, chain, "pp", corrAnalysis::triggerAll, corrAnalysis::allEvents );
+
+  std::cout<< chain << std::endl;
   
   // Data classes
   TStarJetVectorContainer<TStarJetVector>* container;
