@@ -4,22 +4,25 @@
 // Nick Elsey
 
 #include "corrFunctions.hh"
+#include "corrParameters.hh"
 
 namespace corrAnalysis {
+	
+	// -------------------------
+	// IO/OS Manip functionality
+	// -------------------------
+	// Used to understand which format of input file is being used
+	// ( .root file, .txt, .list, etc )
+	// ---------------------------------------------------------------------
+	bool HasEnding (std::string const &full_string, std::string const &ending) {
+		if (full_string.length() >= ending.length()) {
+			return (0 == full_string.compare (full_string.length() - ending.length(), ending.length(), ending) );
+		} else {
+			return false;
+		}
+	}
 
-////////////////////////////////////////////////////////////////////////////////////
-//                                          IO/OS Manip functionality
-////////////////////////////////////////////////////////////////////////////////////
-  
-  bool HasEnding (std::string const &full_string, std::string const &ending) {
-    if (full_string.length() >= ending.length()) {
-      return (0 == full_string.compare (full_string.length() - ending.length(), ending.length(), ending) );
-    } else {
-      return false;
-    }
-  }
-
-  
+  // Other string manipulations
   // Checks if a string begins with a certain substring
   bool BeginsWith (std::string const &full_string, std::string const &beginning) {
     if (full_string.length() >= beginning.length()) {
@@ -28,51 +31,61 @@ namespace corrAnalysis {
       return false;
     }
   }
-
   
-  std::string GetDirFromPath( std::string path ) {     // Used to pull the current directory from its absolute path
+  // Used to pull the current directory from its absolute path
+  // Used in mixing to get mixing parameters
+  std::string GetDirFromPath( std::string path ) {
     return path.substr( path.find_last_of("\\/")+1, path.size() );
   }
 
+	
+	// Used to find current working directory
+	// Trying to make this relatively machine independent
+	std::string getPWD() {
+		char buffer[255];
+		char *answer = getcwd( buffer, sizeof(buffer) );
+		std::string s_cwd;
+		if (answer) { s_cwd = answer; }
+		return s_cwd;
+	}
+	
+	// -------------------------
+	// Analysis functionaliy
+	// -------------------------
+
+	// Function to return DPhi
+	// Not necessary in current version
+	// Analysis uses fastjet::PseudoJet::delta_phi_to
+	// ------------------------------------------------
+	double GetdPhi ( double trigPhi, double assocPhi ){
+		if ( trigPhi < -1*pi ) trigPhi += ( 2 * pi );
+		else if ( trigPhi > pi ) trigPhi -= ( 2 * pi );
+		if ( assocPhi < -1 * pi ) assocPhi += ( 2 * pi );
+		else if ( assocPhi > pi ) assocPhi -= ( 2 * pi );
+		double dphi= assocPhi - trigPhi;
+		if ( dphi < -1 * pi ) dphi += ( 2 * pi );
+		else if ( dphi > pi ) dphi -= ( 2 * pi );
+		return dphi;
+	}
+
+	// Calculate Aj fraction
+	// Used in dijet analysis to compare
+	// To the Aj results for consistency
+	// Checks That there are the correct # of Jets, then returns A_j
+	// -------------------------------------------------------------
+	double CalcAj ( std::vector<fastjet::PseudoJet>& jets ){
+		if ( jets.size()!=2 ){
+			throw ( -1 );
+			return -1e10;
+		}
+		return fabs (( jets.at(0).pt()-jets.at(1).pt() ) / ( jets.at(0).pt()+jets.at(1).pt() ));
+	}
   
-  std::string getPWD() {	// Used to find current working directory
-    char buffer[255];
-    char *answer = getcwd( buffer, sizeof(buffer) );
-    std::string s_cwd;
-    if (answer) { s_cwd = answer; }
-    return s_cwd;
-  }
-
-
-
-  
-////////////////////////////////////////////////////////////////////////////////////
-//                                          Analysis Functionality
-////////////////////////////////////////////////////////////////////////////////////
-
-  double GetdPhi ( double trigPhi, double assocPhi ){	// Function to return DPhi
-    if ( trigPhi < -1*pi ) trigPhi += ( 2 * pi );
-    else if ( trigPhi > pi ) trigPhi -= ( 2 * pi );
-    if ( assocPhi < -1 * pi ) assocPhi += ( 2 * pi );
-    else if ( assocPhi > pi ) assocPhi -= ( 2 * pi );
-    double dphi= assocPhi - trigPhi;
-    if ( dphi < -1 * pi ) dphi += ( 2 * pi );
-    else if ( dphi > pi ) dphi -= ( 2 * pi );
-    return dphi;
-  }
-
-  
-  double CalcAj ( std::vector<fastjet::PseudoJet>& jets ){	// Calculate dijet Aj fraction
-    if ( jets.size()!=2 ){
-      throw ( -1 );
-      return -1e10;
-    }
-    return fabs (( jets.at(0).pt()-jets.at(1).pt() ) / ( jets.at(0).pt()+jets.at(1).pt() ));
-  }
-
-  
-  int GetReferenceCentrality( int gRefMult ) {  // Used to get reference centrality from gRefMult
-    for ( int i = 8; i >= 0;  --i )                        // Uses definitions in corrParameters.hh
+  // Used to get reference centrality from gRefMult
+  // Uses definitions in corrParameters.hh
+  // ----------------------------------------------
+  int GetReferenceCentrality( int gRefMult ) {
+    for ( int i = 8; i >= 0;  --i )
       if ( gRefMult >= y7RefMultCent[i] ) {
         return i;
       }
@@ -80,44 +93,65 @@ namespace corrAnalysis {
     __ERR("Reference Centrality not found")
     return -1;
   }
-
   
-  int GetVzBin( double Vz ) {  // Used to find the Vz Bin - definitions for Vz
-    int VzBin = -1;             // Binning found in corrParameters
-    if ( Vz > vzHighEdge || Vz <= vzLowEdge )    // Check the boundaries
+  // Used to get the inverse definition of reference centality
+  // ( 8->0, 7->1, etc)
+  // ----------------------------------------------
+  int GetReferenceCentralityAlt( int RefCent ) {
+    return abs( 8 - RefCent );
+  }
+  
+  // Used to find the Vz Bin - definitions for Vz
+  // Binning found in corrParameters
+  // ----------------------------------------------
+  int GetVzBin( double Vz ) {
+    int VzBin = -1;
+    // Check the boundaries
+    if ( Vz > vzHighEdge || Vz <= vzLowEdge )
       return -1;
     
-    for ( int i = binsVz-1; i >= 0; --i ) {    // Loop and check each bin
+    // Loop and check each bin
+    for ( int i = binsVz-1; i >= 0; --i ) {
       if ( Vz > ( vzLowEdge + dVz*i ) ) {
         return i;
       }
     }
     __ERR("There is a problem with VzBin finding")
-      return VzBin;
+    return VzBin;
   }
-
   
   // Fills our working container after converting TStarJetVectors into PseudoJets
   // Also makes sure to empty the containers if they are full
+  //
+  // ------------------------------------------------------------------------------
   void ConvertTStarJetVector( TStarJetVectorContainer<TStarJetVector>* container, std::vector<fastjet::PseudoJet> & particles, bool ClearVector ) {
-    // Empty the container if called for
+    // Empty the container
+    // if called for
     if ( ClearVector )
     	particles.clear();
     
-    TStarJetVector* sv;                // Transform TStarJetVectors into (FastJet) PseudoJets
+    // Transform TStarJetVectors into (FastJet) PseudoJets
+    // ---------------------------------------------------
+    TStarJetVector* sv;
     for ( int i=0; i < container->GetEntries() ; ++i ){
       sv = container->Get(i);
+      
       fastjet::PseudoJet tmpPJ = fastjet::PseudoJet( *sv );
       tmpPJ.set_user_index( sv->GetCharge() );
       particles.push_back( tmpPJ );
+      
+      
     }
   }
-
   
   // finds the triggers and saves them, if requireTrigger == True
   void GetTriggers( bool requireTrigger, TClonesArray* triggerObjs, std::vector<fastjet::PseudoJet> & triggers ) {
-    triggers.clear();        // empty the container
-    if ( requireTrigger ) {    // If we use triggers, pull every trigger from the event and convert the high tower triggers
+    
+    // empty the container
+    triggers.clear();
+    // If we use triggers, pull every trigger from the event
+    // And convert the high tower triggers
+    if ( requireTrigger ) {
       TIter nextTrigger(triggerObjs);
       TStarJetPicoTriggerInfo* trigger = 0;
       while ( ( trigger = (TStarJetPicoTriggerInfo*) nextTrigger() ) ) {
@@ -129,89 +163,94 @@ namespace corrAnalysis {
       }
     }
   }
-
   
   // for the pp data where the trigger objects dont seem to be working
   void GetTriggersPP( bool requireTrigger, std::vector<fastjet::PseudoJet> ppParticles, std::vector<fastjet::PseudoJet>& triggers ) {
     // empty the container
     triggers.clear();
+    
     // if we're using triggers, run over all towers and get any with E > triggerThreshold
     if ( requireTrigger ) {
       for ( int i = 0; i < ppParticles.size(); ++i ) {
         fastjet::PseudoJet tmpParticle = ppParticles[i];
         if ( tmpParticle.pt() > triggerThreshold )
           triggers.push_back( tmpParticle );
+      
       }
     }
   }
 
-  
-  //  Verbose output scripts
-  // Settings summary, called before dijet event loop
-  // -------------------------------------------------------
-  void BeginSummaryDijet ( double jetRadius, double leadJetPtMin, double subLeadJetPtMin, double jetMaxPt, double hardJetConstPt, double softJetConstPt, int nVzBins, double vzRange, std::string dijetFile, std::string corrFile ) {
-    std::cout<<" ------- SUMMARY OF SETTINGS ------"<<std::endl;
-    std::cout<<" Jetfinding Algorithm: Anti-kt"<<std::endl;
-    std::cout<<" Resolution Parameter: "<<jetRadius<<std::endl;
-    std::cout<<" Leading Jet minimum pt: "<<leadJetPtMin<<std::endl;
-    std::cout<<" SubLeading Jet minimum pt: "<<subLeadJetPtMin<<std::endl;
-    std::cout<<" Jet Maximum Pt: "<<jetMaxPt<<std::endl;
-    std::cout<<" Hard Jet Constituent minimum pt: "<< hardJetConstPt<<std::endl;
-    std::cout<<" Soft Jet Constituent minimum pt: "<< softJetConstPt<<std::endl;
-    std::cout<<" Number of bins in Vertex Z position: "<<nVzBins<<std::endl;
-    std::cout<<" Vertex Z range (symmetric about 0): "<<vzRange<<std::endl;
-    std::cout<<" Outputting dijet tree to: "<<dijetFile<<std::endl;
-    std::cout<<" Outputting histograms to: "<<corrFile<<std::endl;
-    std::cout<<" ---------- END SUMMARY ----------"<<std::endl;
-  }
+	// ----------------------
+	// Verbose output scripts
+	// ----------------------
 
-  // Settings summary, called before dijet event loop
-  // -------------------------------------------------------
-  void BeginSummaryJet ( double jetRadius, double jetPtMin, double jetPtMax, double jetConstPt, int nVzBins, double vzRange, std::string jetFile, std::string corrFile ) {
-    std::cout<<" ------- SUMMARY OF SETTINGS ------"<<std::endl;
-    std::cout<<" Jetfinding Algorithm: Anti-kt"<<std::endl;
-    std::cout<<" Resolution Parameter: "<<jetRadius<<std::endl;
-    std::cout<<" Leading Jet minimum pt: "<<jetPtMin<<std::endl;
-    std::cout<<" Jet Constituent minimum pt: "<< jetConstPt<<std::endl;
-    std::cout<<" Number of bins in Vertex Z position: "<<nVzBins<<std::endl;
-    std::cout<<" Vertex Z range (symmetric about 0): "<<vzRange<<std::endl;
-    std::cout<<" Outputting jet tree to: "<<jetFile<<std::endl;
-    std::cout<<" Outputting histograms to: "<<corrFile<<std::endl;
-    std::cout<<" ---------- END SUMMARY ----------"<<std::endl;
-  }
+	// Settings summary, called before dijet event loop
+	// -------------------------------------------------------
+	void BeginSummaryDijet ( double jetRadius, double leadJetPtMin, double subLeadJetPtMin, double jetMaxPt, double hardJetConstPt, double softJetConstPt, int nVzBins, double vzRange, std::string dijetFile, std::string corrFile ) {
+		std::cout<<" ------- SUMMARY OF SETTINGS ------"<<std::endl;
+		std::cout<<" Jetfinding Algorithm: Anti-kt"<<std::endl;
+		std::cout<<" Resolution Parameter: "<<jetRadius<<std::endl;
+		std::cout<<" Leading Jet minimum pt: "<<leadJetPtMin<<std::endl;
+		std::cout<<" SubLeading Jet minimum pt: "<<subLeadJetPtMin<<std::endl;
+		std::cout<<" Jet Maximum Pt: "<<jetMaxPt<<std::endl;
+		std::cout<<" Hard Jet Constituent minimum pt: "<< hardJetConstPt<<std::endl;
+		std::cout<<" Soft Jet Constituent minimum pt: "<< softJetConstPt<<std::endl;
+		std::cout<<" Number of bins in Vertex Z position: "<<nVzBins<<std::endl;
+		std::cout<<" Vertex Z range (symmetric about 0): "<<vzRange<<std::endl;
+		std::cout<<" Outputting dijet tree to: "<<dijetFile<<std::endl;
+		std::cout<<" Outputting histograms to: "<<corrFile<<std::endl;
+		std::cout<<" ---------- END SUMMARY ----------"<<std::endl;
+	}
 
-  // called after dijet correlation event loop is complete
-  // ---------------------------------------------------------------------
-  void EndSummaryDijet ( int ntotal, int nviable, int nused, double time ) {
-    std::cout<<"  ----------------- SUMMARY ----------------- "<<std::endl;
-    std::cout<<"  Processed "<< ntotal <<" events in "<< time << " seconds."<<std::endl;
-    std::cout<<"  Of these, "<< nviable << " produced hard dijet pairs,"<<std::endl;
-    std::cout<<"  Which corresponds to "<< 100.0*(double) nviable / (double) ntotal <<"%"<<std::endl;
-    std::cout<<"  Chance per event to find a hard dijet pair"<<std::endl;
-    std::cout<<"  Of these "<< nviable <<" hard dijets, "<< nused <<" produced full dijets that were used"<<std::endl;
-    std::cout<<"  for correlation."<<std::endl;
-    std::cout<<"  Overall Efficiency: "<< time/ (double) nused <<" seconds per dijet"<<std::endl;
-  }
+	// Settings summary, called before dijet event loop
+	// -------------------------------------------------------
+	void BeginSummaryJet ( double jetRadius, double jetPtMin, double jetPtMax, double jetConstPt, int nVzBins, double vzRange, std::string jetFile, std::string corrFile ) {
+	std::cout<<" ------- SUMMARY OF SETTINGS ------"<<std::endl;
+		std::cout<<" Jetfinding Algorithm: Anti-kt"<<std::endl;
+		std::cout<<" Resolution Parameter: "<<jetRadius<<std::endl;
+		std::cout<<" Leading Jet minimum pt: "<<jetPtMin<<std::endl;
+		std::cout<<" Jet Constituent minimum pt: "<< jetConstPt<<std::endl;
+		std::cout<<" Number of bins in Vertex Z position: "<<nVzBins<<std::endl;
+		std::cout<<" Vertex Z range (symmetric about 0): "<<vzRange<<std::endl;
+		std::cout<<" Outputting jet tree to: "<<jetFile<<std::endl;
+		std::cout<<" Outputting histograms to: "<<corrFile<<std::endl;
+		std::cout<<" ---------- END SUMMARY ----------"<<std::endl;
+	}
 
-  // Called after jet correlation event loop is complete
-  // ---------------------------------------------------------------------
-  void EndSummaryJet ( int ntotal, int nused, double time ) {
-    std::cout<<"  ----------------- SUMMARY ----------------- "<<std::endl;
-    std::cout<<"  Processed "<< ntotal <<" events in "<< time << " seconds."<<std::endl;
-    std::cout<<"  Of these, "<< nused << " produced useable leading jets"<<std::endl;
-    std::cout<<"  Which corresponds to "<< 100.0*(double) nused / (double) ntotal <<"%"<<std::endl;
-    std::cout<<"  Chance per event to find a leading jet"<<std::endl;
-    std::cout<<"  for correlation."<<std::endl;
-    std::cout<<"  Overall Efficiency: "<< time/ (double) nused <<" seconds per jet"<<std::endl;
-  }
+	// called after dijet correlation event loop is complete
+	// ---------------------------------------------------------------------
+	void EndSummaryDijet ( int ntotal, int nviable, int nused, double time ) {
+		std::cout<<"  ----------------- SUMMARY ----------------- "<<std::endl;
+		std::cout<<"  Processed "<< ntotal <<" events in "<< time << " seconds."<<std::endl;
+		std::cout<<"  Of these, "<< nviable << " produced hard dijet pairs,"<<std::endl;
+		std::cout<<"  Which corresponds to "<< 100.0*(double) nviable / (double) ntotal <<"%"<<std::endl;
+		std::cout<<"  Chance per event to find a hard dijet pair"<<std::endl;
+		std::cout<<"  Of these "<< nviable <<" hard dijets, "<< nused <<" produced full dijets that were used"<<std::endl;
+		std::cout<<"  for correlation."<<std::endl;
+		std::cout<<"  Overall Efficiency: "<< time/ (double) nused <<" seconds per dijet"<<std::endl;
+	}
+
+	// Called after jet correlation event loop is complete
+	// ---------------------------------------------------------------------
+	void EndSummaryJet ( int ntotal, int nused, double time ) {
+		std::cout<<"  ----------------- SUMMARY ----------------- "<<std::endl;
+		std::cout<<"  Processed "<< ntotal <<" events in "<< time << " seconds."<<std::endl;
+		std::cout<<"  Of these, "<< nused << " produced useable leading jets"<<std::endl;
+		std::cout<<"  Which corresponds to "<< 100.0*(double) nused / (double) ntotal <<"%"<<std::endl;
+		std::cout<<"  Chance per event to find a leading jet"<<std::endl;
+		std::cout<<"  for correlation."<<std::endl;
+		std::cout<<"  Overall Efficiency: "<< time/ (double) nused <<" seconds per jet"<<std::endl;
+	}
 	
-
   // Used to initialized the reader - will set the event cuts,
   // Tower cuts, track cuts and hadronic correction
   // ---------------------------------------------------------------------
   void InitReader( TStarJetPicoReader & reader, TChain* chain, std::string collisionType, std::string triggerString, int nEvents ) {
-    // First tolower() on the analysisType shouldnt be necessary....
+    
+    // First tolower() on the analysisType
+    // shouldnt be necessary....
     std::transform(collisionType.begin(), collisionType.end(), collisionType.begin(), ::tolower);
+    
     // set the chain
     reader.SetInputChain( chain );
     // apply hadronic correction - subtract 100% of charged track energy from towers
@@ -221,6 +260,7 @@ namespace corrAnalysis {
     
     // Event and track selection
     // -------------------------
+    
     TStarJetPicoEventCuts* evCuts = reader.GetEventCuts();
     evCuts->SetTriggerSelection( triggerString.c_str() );
     evCuts->SetVertexZCut ( vertexZCut );
@@ -228,7 +268,7 @@ namespace corrAnalysis {
     evCuts->SetMaxEventEtCut( eventEtCut );
     evCuts->SetVertexZDiffCut( vertexZDiffCut );
     if ( collisionType == "auau" ) {
-      evCuts->SetRefMultCut ( y7RefMultCut );
+    	evCuts->SetRefMultCut ( y7RefMultCut );
     }
     else if ( collisionType == "pp" ) {
       evCuts->SetRefMultCut( 0 );

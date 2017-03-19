@@ -1,3 +1,8 @@
+// Basic functions used in the
+// dijet-hadron and jet-hadron
+// correlation analysis
+// Nick Elsey
+
 #include "include.h"
 
 #ifndef CORRFUNCTIONS_HH
@@ -36,7 +41,10 @@ namespace corrAnalysis {
   
   // Used to get reference centrality from gRefMult
   int GetReferenceCentrality( int gRefMult );
-    
+  
+  // Used to get the inverse definition of reference centality ( 8->0, 7->1, etc)
+  int GetReferenceCentralityAlt( int RefCent );
+  
   // Find the vertex Z bin that corresponds to each Vz
   // Returns -1 if Vz outside of accepted range
   int GetVzBin( double Vz );
