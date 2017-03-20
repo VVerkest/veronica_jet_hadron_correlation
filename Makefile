@@ -61,19 +61,23 @@ $(BDIR)/%  : $(ODIR)/%.o
 ###############################################################################
 ############################# Main Targets ####################################
 ###############################################################################
-all : $(BDIR)/star_pp_correlation
+all : $(BDIR)/geant_pp_correlation $(BDIR)/pythia_pp_correlation $(BDIR)/star_pp_correlation
 
 $(SDIR)/dict.cxx                : $(SDIR)/ktTrackEff.hh
 	cd ${SDIR}; rootcint6 -f dict.cxx -c -I. ./ktTrackEff.hh
 
 $(ODIR)/dict.o                  : $(SDIR)/dict.cxx
 $(ODIR)/ktTrackEff.o            : $(SDIR)/ktTrackEff.cxx $(SDIR)/ktTrackEff.hh
-$(ODIR)/starFunctions.o		: $(SDIR)/starFunctions.cxx $(SDIR)/starFunctions.hh
+$(ODIR)/corrFunctions.o		: $(SDIR)/corrFunctions.cxx $(SDIR)/corrFunctions.hh
 
+$(ODIR)/geant_pp_correlation.o	: $(SDIR)/geant_pp_correlation.cxx
+$(ODIR)/pythia_pp_correlation.o	: $(SDIR)/pythia_pp_correlation.cxx
 $(ODIR)/star_pp_correlation.o	: $(SDIR)/star_pp_correlation.cxx
 
 #data analysis
-$(BDIR)/star_pp_correlation			: $(ODIR)/star_pp_correlation.o	$(ODIR)/starFunctions.o $(ODIR)/ktTrackEff.o $(ODIR)/dict.o
+$(BDIR)/geant_pp_correlation			: $(ODIR)/geant_pp_correlation.o	$(ODIR)/corrFunctions.o $(ODIR)/ktTrackEff.o $(ODIR)/dict.o
+$(BDIR)/pythia_pp_correlation			: $(ODIR)/pythia_pp_correlation.o	$(ODIR)/corrFunctions.o $(ODIR)/ktTrackEff.o $(ODIR)/dict.o
+$(BDIR)/star_pp_correlation			: $(ODIR)/star_pp_correlation.o	$(ODIR)/corrFunctions.o $(ODIR)/ktTrackEff.o $(ODIR)/dict.o
 
 
 ###############################################################################
