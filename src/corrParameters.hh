@@ -27,7 +27,7 @@ namespace corrAnalysis {
   // TriggerStrings
   const std::string triggerAll = "All";				// accept all events
   const std::string	triggerHT = "HT";					// accept events triggered by high E hit in calorimeter
-	const std::string triggerMB = "MB";					// accept minimum bias events
+  const std::string triggerMB = "MB";					// accept minimum bias events
   const std::string triggerPP = "pp";					// accept pp events
   const std::string triggerPPHT = "ppHT";			// accept pp high tower events
   const std::string triggerPPJP = "ppJP";			// accept pp jet patch events
@@ -35,8 +35,8 @@ namespace corrAnalysis {
   const double triggerThreshold = 5.0;				// the required energy for a tower to be considered a trigger
   
   // Event
-  const int 		y7RefMultCut = 269;										// refmult cut for 0-20% centrality
-  const bool 		hadronicCorrection = true;						// will towers have matched tracks energy subtracted?
+  const int y7RefMultCut = 269;										// refmult cut for 0-20% centrality
+  const bool hadronicCorrection = true;						// will towers have matched tracks energy subtracted?
   const double	hadronicCorrectionFraction = 0.9999;	// fraction of energy subtracted
   const double  vertexZCut = 30;											// | Vz | < vertexZCut - vertex Z position requirement
   const double	vertexZDiffCut = 9999;								// | Vz - VPDVz | < vertexZDiffCut
