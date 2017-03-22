@@ -2,6 +2,7 @@ void ComparePlot(){
   const float pi = 3.141592;
   const Int_t nfiles = 4;
   const Int_t nPtBins = 5;
+  double PythiaOverGeant;
   Int_t g,h,i,j;
 
   // create a new Root file
@@ -55,6 +56,8 @@ void ComparePlot(){
       TH2D* PythiaEvents = (TH2D*) PythiaDijetFILE->Get("binvzdist");
       TH2D* PythiaLead = (TH2D*) PythiaLeadCorr->Project3D("ZY");   // Project correlation histogram
       TH2D* PythiaSub = (TH2D*) PythiaSubCorr->Project3D("ZY");
+
+      PythiaOverGeant = double( PythiaEvents->Integral() );
       
       TString nameSet = "PythiaLeadCorr";  // Name projected histograms
       PythiaLead->SetName( nameSet );
@@ -80,11 +83,11 @@ void ComparePlot(){
       PythiaFit[j]->SetParameter(6, 0.2);
       PythiaFit[j]->SetLineColor(color[j]);
       PythiaFit[j]->SetLineWidth(2);
-      PythiaCorr[h][j]->Fit(PythiaFit[j]);
+      PythiaCorr[h][j]->Fit(PythiaFit[j], "Q");
       gROOT->SetEditHistograms();
       PythiaCorr[h][j]->SetLineColor(color[j]);
       PythiaCorr[h][j]->SetLineWidth(2);
-      PythiaCorr[h][j]->SetMaximum(200);
+      PythiaCorr[h][j]->SetMaximum(250);
       PythiaCorr[h][j]->SetMinimum(0);
       gStyle->SetOptStat(1);
       ptbin[h]->cd();
@@ -131,7 +134,7 @@ void ComparePlot(){
       StarFit[j]->SetParameter(6, 0.2);
       StarFit[j]->SetLineColor(color[j]);
       StarFit[j]->SetLineWidth(2);
-      StarCorr[h][j]->Fit(StarFit[j]);
+      StarCorr[h][j]->Fit(StarFit[j], "Q");
       gROOT->SetEditHistograms();
       StarCorr[h][j]->SetLineColor(color[j]);
       StarCorr[h][j]->SetLineWidth(2);
@@ -161,6 +164,10 @@ void ComparePlot(){
       TH2D* GeantEvents = (TH2D*) GeantDijetFILE->Get("binvzdist");
       TH2D* GeantLead = (TH2D*) GeantLeadCorr->Project3D("ZY");   // Project correlation histogram
       TH2D* GeantSub = (TH2D*) GeantSubCorr->Project3D("ZY");
+
+      PythiaOverGeant *= (1/ double( GeantEvents->Integral() ) );
+
+      std::cout<< LeadSub[j] << "  " << ptBinString[h] <<"    Pythia Over Geant:  " << PythiaOverGeant <<std::endl;
       
       nameSet = "GeantLeadCorr";  // Name projected histograms
       GeantLead->SetName( nameSet );
@@ -186,11 +193,11 @@ void ComparePlot(){
       GeantFit[j]->SetParameter(6, 0.2);
       GeantFit[j]->SetLineColor(color[j]);
       GeantFit[j]->SetLineWidth(2);
-      GeantCorr[h][j]->Fit(GeantFit[j]);
+      GeantCorr[h][j]->Fit(GeantFit[j], "Q");
       gROOT->SetEditHistograms();
       GeantCorr[h][j]->SetLineColor(color[j]);
       GeantCorr[h][j]->SetLineWidth(2);
-      GeantCorr[h][j]->SetMaximum(200);
+      GeantCorr[h][j]->SetMaximum(250);
       GeantCorr[h][j]->SetMinimum(0);
       gStyle->SetOptStat(1);
       ptbin[h]->cd();
@@ -243,8 +250,7 @@ void ComparePlot(){
     GeantCorr[h][i]->Draw();
     GeantCorr[h][i]->SetTitle( canvasTitle );
     i+=1;
-    TString SaveName = "weighted_";
-    SaveName += canvasName;
+    TString SaveName = canvasName;
     SaveName += ".png";
     for (i=1; i<nfiles; i++){
       GeantCorr[h][i]->Draw("SAME");
@@ -263,8 +269,7 @@ void ComparePlot(){
     PythiaCorr[h][i]->Draw();
     PythiaCorr[h][i]->SetTitle( canvasTitle );
     i+=1;
-    SaveName = "weighted_";
-    SaveName += canvasName;
+    SaveName = canvasName;
     SaveName += ".png";
     for (i=1; i<nfiles; i++){
       PythiaCorr[h][i]->Draw("SAME");
