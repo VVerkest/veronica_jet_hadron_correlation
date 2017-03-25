@@ -53,7 +53,7 @@ int main ( int argc, const char** argv) {
  bool useEfficiency = false; // choose to use particle-by-particle efficiency
  bool requireTrigger= true; // require leading jet to be within jetRadius of a trigger tower
  double subJetPtMin   = 10.0; // subleading jet minimum pt requirement
- double leadJetPtMin  = 20.0; // leading jet mus of a trigger tower
+ double leadJetPtMin  = 20.0; // leading jet minimum pt requirement
  double jetPtMax = 100.0;  // maximum jet pt
  double jetRadius = 0.4; // jet radius for jet finding
  std::string outputDir = "tmp/";										// directory where everything will be saved
@@ -154,8 +154,6 @@ int main ( int argc, const char** argv) {
   // --------------------------------------
   TStarJetPicoReader reader;
   corrAnalysis::InitReader( reader, chain, "pp", corrAnalysis::triggerAll, corrAnalysis::allEvents );
-
-  std::cout<< chain << std::endl;
   
   // Data classes
   TStarJetVectorContainer<TStarJetVector>* container;
@@ -320,7 +318,7 @@ int main ( int argc, const char** argv) {
   
       
       // Check to see if Vz is in the accepted range; if not, discard
-      if ( VzBin == -1 )																				{ continue; }
+      if ( VzBin == -1 )                 { continue; }
       
       // Convert TStarJetVector to PseudoJet
       corrAnalysis::ConvertTStarJetVector( container, particles, true );
@@ -329,7 +327,6 @@ int main ( int argc, const char** argv) {
       //      corrAnalysis::ConvertTStarJetVector( mbContainer, particles, false);         // uncomment for AuAu embedding
       
       // Get HT triggers ( using the pp version since the HT data cant be gotten)
-      //corrAnalysis::GetTriggers( requireTrigger, triggerObjs, triggers );
       corrAnalysis::GetTriggersPP( requireTrigger, ppParticles, triggers );
       
       // If we require a trigger and we didnt find one, then discard the event
@@ -402,13 +399,7 @@ int main ( int argc, const char** argv) {
         leadingJet.SetPtEtaPhiE( analysisJets.at(0).pt(), analysisJets.at(0).eta(), analysisJets.at(0).phi_std(), analysisJets.at(0).E() );
       }
 
-
-      
-      // now write
-      correlatedDiJets->Fill();
-
-
-
+      correlatedDiJets->Fill();      // now write
       
       // Now we can fill our event histograms
       histograms->CountEvent( VzBin, weight );
