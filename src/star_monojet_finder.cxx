@@ -14,11 +14,25 @@ int main() {
   double leadJetPtMin  = 20.0; // leading jet minimum pt requirement
   double jetPtMax = 100.0;  // maximum jet pt
   double jetRadius = 0.4; // jet radius for jet finding
-  std::string outputDir = "tmp/";										// directory where everything will be saved
-  std::string treeOutFile = "ppMonojet.root";						// jets will be saved in a TTree here
-  std::string inputFile = "Data/ppHT/*.root";			// input file: can be .root, .txt, .list
+  std::string outputDir = "tmp/";                         // directory where everything will be saved
+  std::string corrOutFile =  "ppjetfile.root";           // histograms will be saved here
+  std::string treeOutFile = "ppjettree.root";               // jets will be saved in a TTree here
+  std::string inputFile = "Data/ppHT/*.root";           // input file must be .root
   std::string chainName = "JetTree";            // Tree name in INPUT file
 
+  std::string currentDirectory = corrAnalysis::getPWD( );     // EXIT if not in correct directory!
+  if ( !(corrAnalysis::HasEnding ( currentDirectory, "jet_hadron_corr" ) || corrAnalysis::HasEnding ( currentDirectory, "jet_hadron_correlation" )) ) {
+    std::cerr << "Error: Need to be in jet_hadron_corr directory" << std::endl;
+    return -1;
+  }
+  
+  TStopwatch TimeKeeper;  //Start a timer
+  TimeKeeper.Start( );
+  
+  TH1::SetDefaultSumw2( );  // Histograms will calculate gaussian errors
+  TH2::SetDefaultSumw2( );
+  TH3::SetDefaultSumw2( );
+  
   // Announce Jet-Finding Settings
   corrAnalysis::BeginSummaryJet ( jetRadius, leadJetPtMin, jetPtMax, corrAnalysis::hardTrackMinPt, corrAnalysis::binsVz, corrAnalysis::vzRange, treeOutFile, corrOutFile );
 
@@ -83,9 +97,9 @@ int main() {
   // Records centrality and vertex information for event mixing
   Int_t centralityBin, vertexZBin;
   // Branchs to be written to file
-  TBranch* CDJBranchHi, * CDJBranchLo;
-  TBranch* CDJBranchCentralityBin;
-  TBranch* CDJBranchVertexZBin;
+  TBranch* CDBranchHi, * CDBranchLo;
+  TBranch* CDBranchCentralityBin;
+  TBranch* CDBranchVertexZBin;
 
   correlatedJets = new TTree("pp_jets","Correlated PP Jets" );
   CJBranchHi = correlatedJets->Branch("triggerJet", &leadingJet );
@@ -141,9 +155,9 @@ int main() {
       // Now first apply global jet selector to inclusive jets, then sort by pt
       std::vector<fastjet::PseudoJet> HiResult = fastjet::sorted_by_pt( selectorJetCandidate ( clusterSequenceHigh.inclusive_jets() ) );
       
-      // Check to see if there are enough jets,
-      // and if they meet the momentum cuts - if dijet, checks if they are back to back
-      if ( !corrAnalysis::CheckHardCandidateJets( analysisType, HiResult, leadJetPtMin, subJetPtMin ) ) 	{ continue; }
+      // Check to see if there are enough jets and if they meet the momentum cuts
+      // Monojet analysis: default subJetPtMin to zero (function is independent of subJet Pt)
+      if ( !corrAnalysis::CheckHardCandidateJets( analysisType, HiResult, leadJetPtMin, subJetPtMin=0 ) ) 	{ continue; }
       
       // count "dijets" ( monojet if doing jet analysis )
       nHardJets++;
@@ -151,8 +165,6 @@ int main() {
       // make our hard dijet vector
       std::vector<fastjet::PseudoJet> hardJets = corrAnalysis::BuildHardJets( analysisType, HiResult );
       std::vector<fastjet::PseudoJet> LoResult;
-
-      std::vector<fastjet::PseudoJet> analysisJets = corrAnalysis::BuildMatchedJets( analysisType, hardJets, LoResult, requireTrigger, triggers, jetRadius );
 
       // RETURN HARD JETS
       std::vector<fastjet::PseudoJet> analysisJets = corrAnalysis::BuildMatchedJets( analysisType, hardJets, LoResult, requireTrigger, triggers, jetRadius );
@@ -166,7 +178,7 @@ int main() {
       // FILL PT, ETA, AND PHI FOR MONOJET
       leadingJet.SetPtEtaPhiE( analysisJets.at(0).pt(), analysisJets.at(0).eta(), analysisJets.at(0).phi_std(), analysisJets.at(0).E() );
       
-      correlatedDiJets->Fill();      // now write
+      correlatedJets->Fill();      // now write
       
       histograms->CountEvent( VzBin, weight );      // Now we can fill our event histograms
       histograms->FillVz( vertexZ, weight );
