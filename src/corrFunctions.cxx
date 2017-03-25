@@ -1254,14 +1254,14 @@ namespace corrAnalysis {
     if ( h3DimCorrSub )
       h3DimCorrSub->Write();
     
-    for ( int i = 0; i < binsCentrality; ++i ) {
-      if ( leadingArrays )
-        if ( leadingArrays[i] )
-          leadingArrays[i]->Write();
-      if ( subleadingArrays )
-        if ( subleadingArrays[i] )
-          subleadingArrays[i]->Write();
-    }
+    // for ( int i = 0; i < binsCentrality; ++i ) {
+    //   if ( leadingArrays )
+    //     if ( leadingArrays[i] )
+    //       leadingArrays[i]->Write();
+    //   if ( subleadingArrays )
+    //     if ( subleadingArrays[i] )
+    //       subleadingArrays[i]->Write();
+    //  }
   }
 	
 	
