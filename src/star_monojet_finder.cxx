@@ -12,6 +12,7 @@ int main() {
   bool useEfficiency = false; // choose to use particle-by-particle efficiency
   bool requireTrigger= true; // require leading jet to be within jetRadius of a trigger tower
   double leadJetPtMin  = 20.0; // leading jet minimum pt requirement
+  double subJetPtMin  = 0.0; // no subjet minimum pt requirement
   double jetPtMax = 100.0;  // maximum jet pt
   double jetRadius = 0.4; // jet radius for jet finding
   std::string outputDir = "tmp/";                         // directory where everything will be saved
@@ -157,7 +158,7 @@ int main() {
       
       // Check to see if there are enough jets and if they meet the momentum cuts
       // Monojet analysis: default subJetPtMin to zero (function is independent of subJet Pt)
-      if ( !corrAnalysis::CheckHardCandidateJets( analysisType, HiResult, leadJetPtMin, subJetPtMin=0 ) ) 	{ continue; }
+      if ( !corrAnalysis::CheckHardCandidateJets( analysisType, HiResult, leadJetPtMin, subJetPtMin ) ) 	{ continue; }
       
       // count "dijets" ( monojet if doing jet analysis )
       nHardJets++;
@@ -179,7 +180,8 @@ int main() {
       leadingJet.SetPtEtaPhiE( analysisJets.at(0).pt(), analysisJets.at(0).eta(), analysisJets.at(0).phi_std(), analysisJets.at(0).E() );
       
       correlatedJets->Fill();      // now write
-      
+
+      double weight = 1;    // Default histogram weight
       histograms->CountEvent( VzBin, weight );      // Now we can fill our event histograms
       histograms->FillVz( vertexZ, weight );
       histograms->FillJetPt( analysisJets.at(0).pt(), weight );
