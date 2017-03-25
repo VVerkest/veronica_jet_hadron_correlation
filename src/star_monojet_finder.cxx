@@ -98,9 +98,9 @@ int main() {
   // Records centrality and vertex information for event mixing
   Int_t centralityBin, vertexZBin;
   // Branchs to be written to file
-  TBranch* CDBranchHi, * CDBranchLo;
-  TBranch* CDBranchCentralityBin;
-  TBranch* CDBranchVertexZBin;
+  TBranch* CJBranchHi, * CJBranchLo;
+  TBranch* CJBranchCentralityBin;
+  TBranch* CJBranchVertexZBin;
 
   correlatedJets = new TTree("pp_jets","Correlated PP Jets" );
   CJBranchHi = correlatedJets->Branch("triggerJet", &leadingJet );
