@@ -61,7 +61,7 @@ $(BDIR)/%  : $(ODIR)/%.o
 ###############################################################################
 ############################# Main Targets ####################################
 ###############################################################################
-all : $(BDIR)/geant_pp_correlation $(BDIR)/pythia_pp_correlation $(BDIR)/star_pp_correlation
+all : $(BDIR)/geant_pp_correlation $(BDIR)/pythia_pp_correlation $(BDIR)/star_pp_correlation $(BDIR)/pythia_monojet_finder $(BDIR)/star_monojet_finder
 
 $(SDIR)/dict.cxx                : $(SDIR)/ktTrackEff.hh
 	cd ${SDIR}; rootcint6 -f dict.cxx -c -I. ./ktTrackEff.hh
@@ -73,11 +73,15 @@ $(ODIR)/corrFunctions.o		: $(SDIR)/corrFunctions.cxx $(SDIR)/corrFunctions.hh
 $(ODIR)/geant_pp_correlation.o	: $(SDIR)/geant_pp_correlation.cxx
 $(ODIR)/pythia_pp_correlation.o	: $(SDIR)/pythia_pp_correlation.cxx
 $(ODIR)/star_pp_correlation.o	: $(SDIR)/star_pp_correlation.cxx
+$(ODIR)/pythia_monojet_finder.o	: $(SDIR)/pythia_monojet_finder.cxx
+$(ODIR)/star_monojet_finder.o	: $(SDIR)/star_monojet_finder.cxx
 
 #data analysis
 $(BDIR)/geant_pp_correlation			: $(ODIR)/geant_pp_correlation.o	$(ODIR)/corrFunctions.o $(ODIR)/ktTrackEff.o $(ODIR)/dict.o
 $(BDIR)/pythia_pp_correlation			: $(ODIR)/pythia_pp_correlation.o	$(ODIR)/corrFunctions.o $(ODIR)/ktTrackEff.o $(ODIR)/dict.o
 $(BDIR)/star_pp_correlation			: $(ODIR)/star_pp_correlation.o	$(ODIR)/corrFunctions.o $(ODIR)/ktTrackEff.o $(ODIR)/dict.o
+$(BDIR)/pythia_monojet_finder			: $(ODIR)/pythia_monojet_finder.o	$(ODIR)/corrFunctions.o $(ODIR)/ktTrackEff.o $(ODIR)/dict.o
+$(BDIR)/star_monojet_finder			: $(ODIR)/star_monojet_finder.o	$(ODIR)/corrFunctions.o $(ODIR)/ktTrackEff.o $(ODIR)/dict.o
 
 
 ###############################################################################
