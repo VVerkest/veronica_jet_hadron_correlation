@@ -12,16 +12,14 @@ int main() {
   bool useEfficiency = false; // choose to use particle-by-particle efficiency
   bool requireTrigger= false; // require leading jet to be within jetRadius of a trigger tower
   double leadJetPtMin  = 20.0; // leading jet minimum pt requirement
+  double subJetPtMin  = 0.0; // no subjet minimum pt requirement
   double jetPtMax = 100.0;  // maximum jet pt
   double jetRadius = 0.4; // jet radius for jet finding
   std::string outputDir = "tmp/";                         // directory where everything will be saved
-
-  
   std::string corrOutFile =  "pythiajetfile.root";           // histograms will be saved here
   std::string treeOutFile = "pythiajettree.root";               // jets will be saved in a TTree here
   std::string inputFile = "AddedGeantPythia/picoDst_*.root";           // input file must be .root
   std::string chainName = "JetTreeMc";            // Tree name in INPUT file
-  double subJetPtMin  = 0.0; // no subjet minimum pt requirement
 
   std::string currentDirectory = corrAnalysis::getPWD( );     // EXIT if not in correct directory!
   if ( !(corrAnalysis::HasEnding ( currentDirectory, "jet_hadron_corr" ) || corrAnalysis::HasEnding ( currentDirectory, "jet_hadron_correlation" )) ) {
@@ -89,7 +87,10 @@ int main() {
   
   // selector used to reject hard jets in background estimation
   fastjet::Selector selectorBkgEstimator = corrAnalysis::SelectBkgEstimator( corrAnalysis::maxTrackRap, jetRadius );
-
+  
+  
+  // When we do event mixing we need the jets, so save them
+  // in trees
   // Tree to hold the jets
   TTree* correlatedJets;
   // To hold the TLorentzVectors for leading, subleading
