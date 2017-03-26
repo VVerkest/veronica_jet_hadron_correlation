@@ -11,7 +11,7 @@ int main() {
   bool requireDijets	= false;
   bool useEfficiency = false; // choose to use particle-by-particle efficiency
   bool requireTrigger= true; // require leading jet to be within jetRadius of a trigger tower
-  double leadJetPtMin  = 10.0; // leading jet minimum pt requirement
+  double leadJetPtMin  = 20.0; // leading jet minimum pt requirement
   double subJetPtMin  = 0.0; // no subjet minimum pt requirement
   double jetPtMax = 100.0;  // maximum jet pt
   double jetRadius = 0.4; // jet radius for jet finding
