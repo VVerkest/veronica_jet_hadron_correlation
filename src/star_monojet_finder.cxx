@@ -186,25 +186,26 @@ int main() {
       histograms->FillVz( vertexZ, weight );
       histograms->FillJetPt( analysisJets.at(0).pt(), weight );
       histograms->FillJetEtaPhi( analysisJets.at(0).eta(), analysisJets.at(0).phi_std(), weight );
-        
-      // write out the dijet/jet trees
-      TFile*  treeOut   = new TFile( (outputDir + treeOutFile).c_str(), "RECREATE" );
-      treeOut->cd();
-      correlatedJets->Write();
-      treeOut->Close();
-  
-      // write out the histograms
-      TFile* histOut = new TFile( (outputDir + corrOutFile).c_str(), "RECREATE");
-      histOut->cd();
-      histograms->Write();
-      histOut->Close();
-      
+
     }
   }catch ( std::exception& e) {
     std::cerr << "Caught " << e.what() << std::endl;
     return -1;
   }
 
+          
+  // write out the dijet/jet trees
+  TFile*  treeOut   = new TFile( (outputDir + treeOutFile).c_str(), "RECREATE" );
+  treeOut->cd();
+  correlatedJets->Write();
+  treeOut->Close();
+  
+  // write out the histograms
+  TFile* histOut = new TFile( (outputDir + corrOutFile).c_str(), "RECREATE");
+  histOut->cd();
+  histograms->Write();
+  histOut->Close();
+      
   corrAnalysis::EndSummaryJet ( nEvents, nHardJets, TimeKeeper.RealTime() );
   
   return 0;
