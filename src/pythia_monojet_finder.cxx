@@ -18,7 +18,7 @@ int main() {
   std::string outputDir = "tmp/";                         // directory where everything will be saved
   std::string corrOutFile =  "pythiajetfile.root";           // histograms will be saved here
   std::string treeOutFile = "pythiajettree.root";               // jets will be saved in a TTree here
-  std::string inputFile = ".root";           // input file must be .root
+  std::string inputFile = "AddedGeantPythia/picoDst_*.root";           // input file must be .root
   std::string chainName = "JetTreeMc";            // Tree name in INPUT file
 
   std::string currentDirectory = corrAnalysis::getPWD( );     // EXIT if not in correct directory!
