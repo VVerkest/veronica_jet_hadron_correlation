@@ -7,6 +7,8 @@
 
 int main( int argc, char** argv) {
 
+  std::cout << argc << std::endl;
+
   std::string analysisType  = "ppjet";
   bool requireDijets	= false;
   bool useEfficiency = false; // choose to use particle-by-particle efficiency
@@ -34,11 +36,13 @@ int main( int argc, char** argv) {
   TH2::SetDefaultSumw2( );
   TH3::SetDefaultSumw2( );
 
-  std::vector<std::string> arguments( argv+1, argv+argc );
-
-  if ( argc ==  4 && arguments[1] == "default" ) {
+  if ( argc == 4 ) {
+    std::vector<std::string> arguments( argv+1, argv+argc );
     leadJetPtMin = atof ( arguments[0].c_str() );
+    jetPtMax = atof ( arguments[1].c_str() );
+    jetRadius = atof ( arguments[2].c_str() );
   }
+  else if ( argc ==  3 && arguments[1] == "default" ) { leadJetPtMin = atof ( arguments[0].c_str() ); }
   else { __ERR( "incorrect number of command line arguments" ) return -1; }
 
   // Announce Jet-Finding Settings
