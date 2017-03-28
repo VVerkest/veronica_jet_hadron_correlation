@@ -28,15 +28,11 @@
 
     if ( $2 == 'default' ) then
 	set leadPtMin = $1
-	set jetPtMax = 
-	set outLocation = 
-	set outName = 
-	set outNameTree = 
-	set Files = 
+	set jetPtMax = 100
     endif
 
     # Create the folder name for output
-    set outFile = pythia_${analysis}_lead_${leadPtMin}_max_${jetPtMax}_rad_${jetRadius}
+    set outFile = pythia_${analysis}_lead_${leadPtMin}_max_${jetPtMax}
     # Make the directories since they may not exist...
     if ( ! -d out/${outFile} ) then
     mkdir -p out/${outFile}
