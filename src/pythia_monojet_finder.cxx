@@ -5,7 +5,7 @@
 #include "corrParameters.hh"
 #include "include.h"
 
-int main() {
+int main( int argc, char** argv) {
 
   std::string analysisType  = "ppjet";
   bool requireDijets	= false;
@@ -15,13 +15,11 @@ int main() {
   double jetPtMax = 100.0;  // maximum jet pt
   double jetRadius = 0.4; // jet radius for jet finding
   std::string outputDir = "tmp/";                         // directory where everything will be saved
-
-  
+  double subJetPtMin  = 0.0; // no subjet minimum pt requirement
+  std::string chainName = "JetTreeMc";            // Tree name in INPUT file
   std::string corrOutFile =  "pythiajetfile.root";           // histograms will be saved here
   std::string treeOutFile = "pythiajettree.root";               // jets will be saved in a TTree here
-  std::string inputFile = "AddedGeantPythia/picoDst_*.root";           // input file must be .root
-  std::string chainName = "JetTreeMc";            // Tree name in INPUT file
-  double subJetPtMin  = 0.0; // no subjet minimum pt requirement
+  std::string inputFile = "AddedGeantPythia/*";           // input file must be .root
 
   std::string currentDirectory = corrAnalysis::getPWD( );     // EXIT if not in correct directory!
   if ( !(corrAnalysis::HasEnding ( currentDirectory, "jet_hadron_corr" ) || corrAnalysis::HasEnding ( currentDirectory, "jet_hadron_correlation" )) ) {
@@ -35,7 +33,14 @@ int main() {
   TH1::SetDefaultSumw2( );  // Histograms will calculate gaussian errors
   TH2::SetDefaultSumw2( );
   TH3::SetDefaultSumw2( );
-  
+
+  std::vector<std::string> arguments( argv+1, argv+argc );
+
+  if ( argc ==  2 && arguments[1] == "default" ) {
+    leadJetPtMin = atof ( arguments[0].c_str() );
+  }
+  else { __ERR( "incorrect number of command line arguments" ) return -1; }
+
   // Announce Jet-Finding Settings
   corrAnalysis::BeginSummaryJet ( jetRadius, leadJetPtMin, jetPtMax, corrAnalysis::hardTrackMinPt, corrAnalysis::binsVz, corrAnalysis::vzRange, treeOutFile, corrOutFile );
 
