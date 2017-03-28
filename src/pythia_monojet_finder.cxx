@@ -36,7 +36,7 @@ int main( int argc, char** argv) {
   TH2::SetDefaultSumw2( );
   TH3::SetDefaultSumw2( );
 
-  if ( argc == 7 ) {
+  if ( argc == 6 ) {
     std::vector<std::string> arguments( argv+1, argv+argc );
     leadJetPtMin = atof ( arguments[0].c_str() );
     jetPtMax = atof ( arguments[1].c_str() );
