@@ -36,11 +36,14 @@ int main( int argc, char** argv) {
   TH2::SetDefaultSumw2( );
   TH3::SetDefaultSumw2( );
 
-  if ( argc == 4 ) {
+  if ( argc == 7 ) {
     std::vector<std::string> arguments( argv+1, argv+argc );
     leadJetPtMin = atof ( arguments[0].c_str() );
     jetPtMax = atof ( arguments[1].c_str() );
-    jetRadius = atof ( arguments[2].c_str() );
+    outLocation = atof ( arguments[2].c_str() );
+    outName = atof ( arguments[3].c_str() );
+    outNameTree = atof ( arguments[4].c_str() );
+    Files = atof ( arguments[5].c_str() );
   }
   else if ( argc ==  3 ){
     std::vector<std::string> arguments( argv+1, argv+argc );

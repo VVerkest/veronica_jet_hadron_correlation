@@ -7,7 +7,7 @@
     set command = './bin/pythia_monojet_finder'
     set base = AddedGeantPythia/
 
-    if ( $# != "4" && !( $2 == 'default' ) ) then
+    if ( $# != "7" && !( $2 == 'default' ) ) then
     echo 'Error: illegal number of parameters'
     exit
     endif
@@ -21,11 +21,18 @@
     # Arguments
     set leadPtMin = $1
     set jetPtMax = $2
-    set jetRadius = $3
+    set outLocation = $3
+    set outName = $4
+    set outNameTree = $5
+    set Files = $6
 
     if ( $2 == 'default' ) then
-    set jetPtMax = 100.0
-    set jetRadius = 0.4
+	set leadPtMin = $1
+	set jetPtMax = 
+	set outLocation = 
+	set outName = 
+	set outNameTree = 
+	set Files = 
     endif
 
     # Create the folder name for output
