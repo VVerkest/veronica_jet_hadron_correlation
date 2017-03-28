@@ -7,7 +7,7 @@
     set command = './bin/pythia_monojet_finder'
     set base = AddedGeantPythia/
 
-    if ( $# != "3" && !( $2 == 'default' ) ) then
+    if ( $# != "4" && !( $2 == 'default' ) ) then
     echo 'Error: illegal number of parameters'
     exit
     endif
