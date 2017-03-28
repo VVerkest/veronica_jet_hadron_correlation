@@ -43,6 +43,7 @@ int main( int argc, char** argv) {
     jetRadius = atof ( arguments[2].c_str() );
   }
   else if ( argc ==  3 ){
+    std::vector<std::string> arguments( argv+1, argv+argc );
     if ( arguments[1] == "default" ) { leadJetPtMin = atof ( arguments[0].c_str() ); }
   }
   else { __ERR( "incorrect number of command line arguments" ) return -1; }
