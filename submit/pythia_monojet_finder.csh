@@ -28,7 +28,7 @@
 
     if ( $2 == 'default' ) then
 	set leadPtMin = $1
-	set jetPtMax = 100
+	set jetPtMax = 100.0
     endif
 
     # Create the folder name for output
