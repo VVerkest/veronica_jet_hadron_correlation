@@ -36,7 +36,7 @@ int main( int argc, char** argv) {
 
   std::vector<std::string> arguments( argv+1, argv+argc );
 
-  if ( argc ==  2 && arguments[1] == "default" ) {
+  if ( argc ==  3 && arguments[1] == "default" ) {
     leadJetPtMin = atof ( arguments[0].c_str() );
   }
   else { __ERR( "incorrect number of command line arguments" ) return -1; }
