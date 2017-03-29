@@ -191,11 +191,11 @@ int main( int argc, char** argv) {
       
       vertexZBin = VzBin;
 
-      //  // GEANT/PYTHIA WEIGHTING
-      // TString geantFile =  reader.GetInputChain()->GetCurrentFile()->GetName();
-      // if ( geantFile.Contains("Geant") ){					// determine if data is Geant data
-      // 	weight= corrAnalysis::LookupXsec( geantFile );			// weight histograms by xsection
-      // }
+       // GEANT/PYTHIA WEIGHTING
+      TString geantFile =  reader.GetInputChain()->GetCurrentFile()->GetName();
+      if ( geantFile.Contains("Geant") ){					// determine if data is Geant data
+      	weight= corrAnalysis::LookupXsec( geantFile );			// weight histograms by xsection
+      }
       
       // FILL PT, ETA, AND PHI FOR MONOJET
       leadingJet.SetPtEtaPhiE( analysisJets.at(0).pt(), analysisJets.at(0).eta(), analysisJets.at(0).phi_std(), analysisJets.at(0).E() );
