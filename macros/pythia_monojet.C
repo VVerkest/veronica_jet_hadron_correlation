@@ -39,7 +39,8 @@ void pythia_monojet(){
      gStyle->SetOptStat(0);
      
      // WRITE
-     leadJetPt[i]->Write(fileSaveName);
+     top->cd();
+     leadJetPt[i]->Write();
    }
 
  delete top;
