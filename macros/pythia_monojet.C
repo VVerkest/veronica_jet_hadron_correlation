@@ -39,6 +39,7 @@ void pythia_monojet(){
      gStyle->SetOptStat(0);
      
      // WRITE
+     top->cd();
      leadJetPt[i]->Write();
    }
 
