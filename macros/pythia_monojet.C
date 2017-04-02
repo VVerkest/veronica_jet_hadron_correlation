@@ -26,20 +26,20 @@ void pythia_monojet(){
 
      //  IMPORT
      TFile* ppjetFILE = new TFile( importName, "READ" );
-     TH3D* leadJetPt = (TH3D*) ppjetFILE->Get("ppleadjetpt");
-     TH2D* ppjetEvents = (TH2D*) ppjetFILE->Get("binvzdist");
+     TH1D* leadJetPt[i] = (TH1D*) ppjetFILE->Get("ppleadjetpt");
+     TH1D* ppjetEvents[i] = (TH1D*) ppjetFILE->Get("binvzdist");
      TString nameSet = "pp_jetPt_"
      nameSet += ptBinLo[i];
      nameSet += "_";
      nameSet += ptBinHi[i];
 
-     leadJetPt->SetName(nameSet);
-     leadJetPt->Scale( 1/double(ppjetEvents->Integral()) );
+     leadJetPt[i]->SetName(nameSet);
+     leadJetPt[i]->Scale( 1/double(ppjetEvents->Integral()) );
        
      gStyle->SetOptStat(0);
      
      // WRITE
-     leadJetPt->Write();
+     leadJetPt[i]->Write();
    }
 
  delete top;
