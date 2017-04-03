@@ -196,6 +196,12 @@ int main( int argc, char** argv) {
       if ( geantFile.Contains("Geant") ){					// determine if data is Geant data
       	weight= corrAnalysis::LookupXsec( geantFile );			// weight histograms by xsection
       }
+
+      std::cout<< " File:   " << geantFile << std::endl;
+      std::cout<< " Weight:  "<< weight << std::endl;
+      std::cout<< " nMatchedHard:  "<< nMatchedHard << std::endl;
+      std::cout<< " analysisJets.size():  "<< analysisJets.size() << std::endl;
+      std::cout<< " ___________________________________________________________________________ "<< std::endl;
       
       // FILL PT, ETA, AND PHI FOR MONOJET
       leadingJet.SetPtEtaPhiE( analysisJets.at(0).pt(), analysisJets.at(0).eta(), analysisJets.at(0).phi_std(), analysisJets.at(0).E() );
