@@ -7,6 +7,8 @@
 
 int main( int argc, char** argv) {
 
+  std::cout << argc << std::endl;
+
   std::string analysisType  = "ppjet";
   bool requireDijets	= false;
   bool useEfficiency = false; // choose to use particle-by-particle efficiency
@@ -185,7 +187,7 @@ int main( int argc, char** argv) {
 
       // if zero jets were returned, exit out
       if ( analysisJets.size() == 0 )		{ continue; }
-      nMatchedHard+= analysisJets.size();
+      nMatchedHard ++;
       
       vertexZBin = VzBin;
 
@@ -195,22 +197,20 @@ int main( int argc, char** argv) {
       	weight= corrAnalysis::LookupXsec( geantFile );			// weight histograms by xsection
       }
 
-      std::cout<< " File:   " << geantFile << std::endl;
-      std::cout<< " Weight:  "<< weight << std::endl;
-      std::cout<< " nMatchedHard:  "<< nMatchedHard << std::endl;
-      std::cout<< " analysisJets.size():  "<< analysisJets.size() << std::endl;
-      std::cout<< " ___________________________________________________________________________ "<< std::endl;
-      
       // FILL PT, ETA, AND PHI FOR MONOJET
-      leadingJet.SetPtEtaPhiE( analysisJets.at(0).pt(), analysisJets.at(0).eta(), analysisJets.at(0).phi_std(), analysisJets.at(0).E() );
+      for ( int j = 0; j < hardJets.size(); ++ j ) {
+	leadingJet.SetPtEtaPhiE( analysisJets.at(j).pt(), analysisJets.at(j).eta(), analysisJets.at(j).phi_std(), analysisJets.at(j).E() );
+      }
       
       correlatedJets->Fill();      // now write
 
       histograms->CountEvent( VzBin, weight );      // Now we can fill our event histograms
       histograms->FillVz( vertexZ, weight );
-      histograms->FillJetPt( analysisJets.at(0).pt(), weight );
-      histograms->FillJetEtaPhi( analysisJets.at(0).eta(), analysisJets.at(0).phi_std(), weight );
 
+      for ( int j = 0; j < hardJets.size(); ++ j ) {
+	histograms->FillJetPt( analysisJets.at(j).pt(), weight );
+	histograms->FillJetEtaPhi( analysisJets.at(j).eta(), analysisJets.at(j).phi_std(), weight );
+      }
     }
   }catch ( std::exception& e) {
     std::cerr << "Caught " << e.what() << std::endl;
