@@ -574,12 +574,9 @@ namespace corrAnalysis {
 	return matchedToJet;
       }
     }
-    else {
-      __ERR("Undefined analysis type")
-    	throw( -1 );
-    }
-    __ERR("Something weird happened")
+    __ERR("Undefined analysis type")
       throw( -1 );
+
   }
 
 
