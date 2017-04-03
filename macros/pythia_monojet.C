@@ -15,7 +15,7 @@ void pythia_monojet(){
   double ptBinHi[nPtBins] = { 4, 5, 7, 9, 11, 15, 25, 35, 45, 55, 65 };
   TString ptBinString[nPtBins] = { "3.0-4.0", "4.0-5.0", "5.0-7.0","7.0-9.0", "9.0-11.0", "11.0-15.0", "15.0-25.0", "25.0-35.0", "35.0-45.0", "45.0-55.0", "55.0-65.0" };
   Int_t i;
-  double l, h;
+  double l, h, events;
   TString importName, ptNameSet, eventsNameSet;
   TH2D* leadJetPt[nPtBins];
   TH1D* ppjetEvents[nPtBins];
@@ -42,7 +42,11 @@ void pythia_monojet(){
     
     leadJetPt[i]->SetName(ptNameSet);
     ppjetEvents[i]->SetName(eventsNameSet);
-    leadJetPt[i]->Scale( 1/double(ppjetEvents->Integral()) );
+
+    events = double(ppjetEvents->Integral());
+    
+    if ( events != 0 ) { leadJetPt[i]->Scale( 1/double(ppjetEvents->Integral()) ); }
+    // DO NOT divide by zero!
        
     gStyle->SetOptStat(0);
      
