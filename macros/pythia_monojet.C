@@ -42,6 +42,8 @@ void pythia_monojet(){
     ppjetEvents[i]->SetName(eventsNameSet);
 
     events = double(leadJetPt[i]->GetEntries());
+
+    std::cout << " pt bin range:   " << ptBinString[i] << "              number of events:  " << events << std::endl;
     
     if ( events != 0 ) {
       leadJetPt[i]->Scale( 1/events );    // DO NOT divide by zero!
