@@ -46,15 +46,13 @@ void pythia_monojet(){
     events = double(leadJetPt[i]->GetEntries());
     std::cout << "Pythia pt range :  " << ptBinString[i] << "        Number of Events:  " << events << std::endl;
     
-    if ( events != 0 ) { leadJetPt[i]->Scale( 1/events ); }
-    // DO NOT divide by zero!
-       
-    gStyle->SetOptStat(1);
-     
-    // WRITE
-    top->cd();
-    leadJetPt[i]->Write();
+    if ( events != 0 ) {
+      leadJetPt[i]->Scale( 1/events );    // DO NOT divide by zero!
+      gStyle->SetOptStat(1);
+      // WRITE
+      top->cd();
+      leadJetPt[i]->Write();
+    }
   }
-
   delete top;
 }
