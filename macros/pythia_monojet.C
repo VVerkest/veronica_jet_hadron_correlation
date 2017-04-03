@@ -17,7 +17,8 @@ void pythia_monojet(){
   Int_t i;
   double l, h;
   TString importName, ptNameSet, eventsNameSet;
-  TH1D* leadJetPt[nPtBins], ppjetEvents[nPtBins];
+  TH2D* leadJetPt[nPtBins];
+  TH1D* ppjetEvents[nPtBins];
     
   for (i=0;i<nPtBins;i++) {
     importName = "pythia_ppjet_lead_20_max_100__";
@@ -36,7 +37,7 @@ void pythia_monojet(){
 
     //  IMPORT
     TFile* ppjetFILE = new TFile( importName, "READ" );
-    leadJetPt[i] = ppjetFILE->Get("ppleadjetpt");
+    leadJetPt[i] = ppjetFILE->Get("pptriggerjetpt");
     ppjetEvents[i] = ppjetFILE->Get("binvzdist");
     
     leadJetPt[i]->SetName(ptNameSet);
