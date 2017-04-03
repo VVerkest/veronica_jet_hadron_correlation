@@ -91,6 +91,8 @@ namespace corrAnalysis {
   // triggers: the list of triggers
   // jetRadius: radius used for clustering
   std::vector<fastjet::PseudoJet> BuildMatchedJets( std::string analysisType, std::vector<fastjet::PseudoJet> & hardJets, std::vector<fastjet::PseudoJet> & LoResult, bool requireTrigger, std::vector<fastjet::PseudoJet> & triggers, double jetRadius = 0.4 );
+
+  std::vector<fastjet::PseudoJet> ReturnAllHardJets( std::string analysisType, std::vector<fastjet::PseudoJet> & hardJets, std::vector<fastjet::PseudoJet> & LoResult, bool requireTrigger, std::vector<fastjet::PseudoJet> & triggers, double jetRadius = 0.4 );
   
   // Finally, correlation function -
   // It correlates leading and subleading jets

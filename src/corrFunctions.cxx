@@ -539,8 +539,46 @@ namespace corrAnalysis {
     __ERR("Something weird happened")
       throw( -1 );
   }
+
+  // Output all hard monojets from jetfinding
+  std::vector<fastjet::PseudoJet> ReturnAllHardJets( std::string analysisType, std::vector<fastjet::PseudoJet> & hardJets, std::vector<fastjet::PseudoJet> & LoResult, bool requireTrigger, std::vector<fastjet::PseudoJet> & triggers, double jetRadius ) {
+    
+    if ( analysisType == "jet" || analysisType == "ppjet" ) {
+      if ( hardJets.size() == 0 ) {
+        __ERR("need at least one jet for jet analysis")
+	  throw(-1);
+      }
+      // Jet analysis uses hard jet so no need to match
+      // Check if it has to be matched to HT trigger
+      if ( requireTrigger ) {
+        // build selector to match triggers to the jet
+        fastjet::Selector selectMatchedTrigger = fastjet::SelectorCircle( jetRadius );
+        
+        for ( int j = 0; j < triggers.size(); ++ j ) {
+	  selectMatchedTrigger.set_reference( triggers.at(j) );
+					
+          std::vector<fastjet::PseudoJet> matchedToJet = sorted_by_pt(selectMatchedTrigger( hardJets ) );
+	  return matchedToJet;
+	}
+        	
+      }
+      // if we didnt find a matched trigger, return empty
+      return std::vector<fastjet::PseudoJet>();
+    }
+    else {
+      std::vector<fastjet::PseudoJet> matchedToJet;
+
+      for ( int j = 0; j < hardJets.size(); ++ j ) {
+	matchedToJet.push_back( hardJets.at(j) );
+
+	return matchedToJet;
+      }
+    }
+  }
+
+
   
-  // Used to correlate jefts and their charged associated particles
+  // Used to correlate jets and their charged associated particles
   // Checks to make sure the efficiency is sane
   // First, to check that the track makes all cuts
   bool useTrack( fastjet::PseudoJet& assocTrack, double efficiency ) {
@@ -555,7 +593,7 @@ namespace corrAnalysis {
 	  
     return true;
   }
-
+    
   // WEIGHTING FOR GEANT DATA!!
   double LookupXsec(TString::TString & currentfile ){
 
