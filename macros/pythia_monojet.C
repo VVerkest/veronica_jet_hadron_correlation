@@ -43,7 +43,7 @@ void pythia_monojet(){
     leadJetPt[i]->SetName(ptNameSet);
     ppjetEvents[i]->SetName(eventsNameSet);
 
-    events = double(leadJetPt[1]->GetEntries());
+    events = double(leadJetPt[i]->GetEntries());
     
     if ( events != 0 ) { leadJetPt[i]->Scale( 1/events ); }
     // DO NOT divide by zero!
