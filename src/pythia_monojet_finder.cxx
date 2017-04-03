@@ -7,8 +7,6 @@
 
 int main( int argc, char** argv) {
 
-  std::cout << argc << std::endl;
-
   std::string analysisType  = "ppjet";
   bool requireDijets	= false;
   bool useEfficiency = false; // choose to use particle-by-particle efficiency
