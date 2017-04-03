@@ -17,7 +17,7 @@ void pythia_monojet(){
   Int_t i;
   double l, h;
   TString importName, ptNameSet, eventsNameSet;
-  TH1D* leadJetPt[i], ppjetEvents[i];
+  TH1D* leadJetPt[nPtBins], ppjetEvents[nPtBins];
     
   for (i=0;i<nPtBins;i++) {
     importName = "pythia_ppjet_lead_20_max_100__";
