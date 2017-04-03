@@ -15,7 +15,6 @@ void pythia_monojet(){
   double ptBinHi[nPtBins] = { 4, 5, 7, 9, 11, 15, 25, 35, 45, 55, 65 };
   TString ptBinString[nPtBins] = { "3.0-4.0", "4.0-5.0", "5.0-7.0","7.0-9.0", "9.0-11.0", "11.0-15.0", "15.0-25.0", "25.0-35.0", "35.0-45.0", "45.0-55.0", "55.0-65.0" };
   Int_t i;
-  TH1D *leadJetPt[nPtBins];
     
   for (i=0;i<nPtBins;i++) {
     TString importName = "pythia_ppjet_lead_20_max_100__";
@@ -26,21 +25,21 @@ void pythia_monojet(){
 
     //  IMPORT
     TFile* ppjetFILE = new TFile( importName, "READ" );
-    TH1D* leadJetPt[i] = (TH1D*) ppjetFILE->Get("ppleadjetpt");
-    TH1D* ppjetEvents[i] = (TH1D*) ppjetFILE->Get("binvzdist");
+    TH1D* leadJetPt = (TH1D*) ppjetFILE->Get("ppleadjetpt");
+    TH1D* ppjetEvents = (TH1D*) ppjetFILE->Get("binvzdist");
     TString nameSet = "pp_jetPt_"
-      nameSet += ptBinLo[i];
+    nameSet += ptBinLo[i];
     nameSet += "_";
     nameSet += ptBinHi[i];
 
-    leadJetPt[i]->SetName(nameSet);
-    leadJetPt[i]->Scale( 1/double(ppjetEvents->Integral()) );
+    leadJetPt->SetName(nameSet);
+    leadJetPt->Scale( 1/double(ppjetEvents->Integral()) );
        
     gStyle->SetOptStat(0);
      
     // WRITE
     top->cd();
-    leadJetPt[i]->Write();
+    leadJetPt->Write();
   }
 
   delete top;
