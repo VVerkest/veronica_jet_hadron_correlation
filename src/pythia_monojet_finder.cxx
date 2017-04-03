@@ -192,7 +192,7 @@ int main( int argc, char** argv) {
        // GEANT/PYTHIA WEIGHTING
       TString geantFile =  reader.GetInputChain()->GetCurrentFile()->GetName();
       if ( geantFile.Contains("Geant") ){					// determine if data is Geant data
-      	weight= corrAnalysis::LookupXsec( geantFile );			// weight histograms by xsection
+      	weight= ( corrAnalysis::LookupXsec( geantFile ) )*nMatchedHard;			// weight histograms by xsection
       }
       
       // FILL PT, ETA, AND PHI FOR MONOJET
