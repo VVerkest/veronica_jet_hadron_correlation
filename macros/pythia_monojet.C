@@ -16,12 +16,15 @@ void pythia_monojet(){
   TString ptBinString[nPtBins] = { "3.0-4.0", "4.0-5.0", "5.0-7.0","7.0-9.0", "9.0-11.0", "11.0-15.0", "15.0-25.0", "25.0-35.0", "35.0-45.0", "45.0-55.0", "55.0-65.0" };
   Int_t i;
   double l, h;
+  TString importName;
     
   for (i=0;i<nPtBins;i++) {
     TString importName = "pythia_ppjet_lead_20_max_100__";
-    importName += ptBinLo[i];
+    l = ptBinLo[i];
+    h = ptBinHi[i];
+    importName += l;
     importName += "_";
-    importName += ptBinHi[i];
+    importName += h;
     importName += ".root";
 
     //  IMPORT
@@ -29,8 +32,7 @@ void pythia_monojet(){
     TH1D* leadJetPt = (TH1D*) ppjetFILE->Get("ppleadjetpt");
     TH1D* ppjetEvents = (TH1D*) ppjetFILE->Get("binvzdist");
     TString nameSet = "pp_jetPt_"
-    l = ptBinLo[i];
-    h = ptBinHi[i];
+    
     nameSet += l;
     nameSet += "_";
     nameSet += h;
