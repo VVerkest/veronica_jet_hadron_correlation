@@ -181,11 +181,11 @@ int main( int argc, char** argv) {
       std::vector<fastjet::PseudoJet> LoResult;
 
       // RETURN HARD JETS
-      std::vector<fastjet::PseudoJet> analysisJets = corrAnalysis::ReturnAllHardJets( analysisType, hardJets, LoResult, requireTrigger, triggers, jetRadius );
+      std::vector<fastjet::PseudoJet> analysisJets = corrAnalysis::BuildMatchedJets( analysisType, hardJets, LoResult, requireTrigger, triggers, jetRadius );
 
       // if zero jets were returned, exit out
       if ( analysisJets.size() == 0 )		{ continue; }
-      nMatchedHard ++;
+      nMatchedHard++;
       
       vertexZBin = VzBin;
 
@@ -194,21 +194,16 @@ int main( int argc, char** argv) {
       if ( geantFile.Contains("Geant") ){					// determine if data is Geant data
       	weight= corrAnalysis::LookupXsec( geantFile );			// weight histograms by xsection
       }
-
+      
       // FILL PT, ETA, AND PHI FOR MONOJET
-      for ( int j = 0; j < hardJets.size(); ++ j ) {
-	leadingJet.SetPtEtaPhiE( analysisJets.at(j).pt(), analysisJets.at(j).eta(), analysisJets.at(j).phi_std(), analysisJets.at(j).E() );
-      }
+      leadingJet.SetPtEtaPhiE( analysisJets.at(0).pt(), analysisJets.at(0).eta(), analysisJets.at(0).phi_std(), analysisJets.at(0).E() );
       
       correlatedJets->Fill();      // now write
 
       histograms->CountEvent( VzBin, weight );      // Now we can fill our event histograms
       histograms->FillVz( vertexZ, weight );
-
-      for ( int j = 0; j < hardJets.size(); ++ j ) {
-	histograms->FillJetPt( analysisJets.at(j).pt(), weight );
-	histograms->FillJetEtaPhi( analysisJets.at(j).eta(), analysisJets.at(j).phi_std(), weight );
-      }
+      histograms->FillJetPt( analysisJets.at(0).pt(), weight );
+      histograms->FillJetEtaPhi( analysisJets.at(0).eta(), analysisJets.at(0).phi_std(), weight );
     }
   }catch ( std::exception& e) {
     std::cerr << "Caught " << e.what() << std::endl;
