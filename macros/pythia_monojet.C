@@ -1,6 +1,6 @@
 void pythia_monojet(){
 
-  TString fileSaveName = "pythiaTEST_monojet_min_0_GeV";
+  TString fileSaveName = "pythia_monojet_min_0_GeV";
   fileSaveName += ".root";
   TString canvasTitle = "Pythia Monojet (Min 0 GeV) : ";
   
@@ -19,7 +19,7 @@ void pythia_monojet(){
   TH1D* ppjetEvents[nPtBins];
     
   for (i=0;i<nPtBins;i++) {
-    importName = "pythiaTEST_ppjet_lead_0_max_100__";
+    importName = "pythia_ppjet_lead_0_max_100__";
     l = ptBinLo[i];
     h = ptBinHi[i];
     importName += l;
