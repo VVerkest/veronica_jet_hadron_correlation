@@ -43,7 +43,6 @@ void pythia_monojet(){
 
     events = double(leadJetPt[i]->GetEntries());
     
-<<<<<<< HEAD
     if ( events != 0 ) {
       leadJetPt[i]->Scale( 1/events );    // DO NOT divide by zero!
       gStyle->SetOptStat(1);
@@ -51,17 +50,7 @@ void pythia_monojet(){
       top->cd();
       leadJetPt[i]->Write();
     }
-=======
-    if ( events != 0 ) { leadJetPt[i]->Scale( 1/events ); }
-    // DO NOT divide by zero!
-       
-    gStyle->SetOptStat(0);
-     
-    // WRITE
-    top->cd();
-    leadJetPt[i]->Write();
-    ppjetEvents[i]->Write();
->>>>>>> parent of 03fd448... output values
+
   }
   delete top;
 }
