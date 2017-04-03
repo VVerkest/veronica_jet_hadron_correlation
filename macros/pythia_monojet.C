@@ -38,7 +38,7 @@ void pythia_monojet(){
     //  IMPORT
     TFile* ppjetFILE = new TFile( importName, "READ" );
     leadJetPt[i] = (TH2D*) ppjetFILE->Get("pptriggerjetpt");
-    ppjetEvents[i] = ppjetFILE->Get("binvzdist");
+    ppjetEvents[i] = (TH1D*) ppjetFILE->Get("binvzdist");
     
     leadJetPt[i]->SetName(ptNameSet);
     ppjetEvents[i]->SetName(eventsNameSet);
