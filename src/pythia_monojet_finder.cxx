@@ -183,11 +183,11 @@ int main( int argc, char** argv) {
       std::vector<fastjet::PseudoJet> LoResult;
 
       // RETURN HARD JETS
-      std::vector<fastjet::PseudoJet> analysisJets = corrAnalysis::BuildMatchedJets( analysisType, hardJets, LoResult, requireTrigger, triggers, jetRadius );
+      std::vector<fastjet::PseudoJet> analysisJets = corrAnalysis::ReturnAllHardJets( analysisType, hardJets, LoResult, requireTrigger, triggers, jetRadius );
 
       // if zero jets were returned, exit out
       if ( analysisJets.size() == 0 )		{ continue; }
-      nMatchedHard++;
+      nMatchedHard+= analysisJets.size();
       
       vertexZBin = VzBin;
 
