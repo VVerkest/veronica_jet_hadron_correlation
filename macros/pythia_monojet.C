@@ -25,12 +25,15 @@ void pythia_monojet(){
     importName += l;
     importName += "_";
     importName += h;
-
-    ptNameSet = "pythiaJet_pt";
-    eventsNameSet = "pythiaJet_events";
-    
     importName += ".root";
 
+    ptNameSet = "Pythia Jets:  ";
+    ptNameSet += ptBinString[i];
+    ptNameSet += " GeV"
+    eventsNameSet = "Pythia Events: ";
+    eventsNameSet += ptBinString[i];
+    eventsNameSet += " GeV"
+      
     //  IMPORT
     TFile* ppjetFILE = new TFile( importName, "READ" );
     leadJetPt[i] = (TH2D*) ppjetFILE->Get("pptriggerjetpt");
