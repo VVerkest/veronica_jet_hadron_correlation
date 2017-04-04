@@ -14,7 +14,7 @@ void pythia_monojet(){
   TString ptBinString[nPtBins] = { "3.0-4.0", "4.0-5.0", "5.0-7.0","7.0-9.0", "9.0-11.0", "11.0-15.0", "15.0-25.0", "25.0-35.0", "35.0-45.0", "45.0-55.0", "55.0-65.0" };
   Int_t i;
   double l, h, events;
-  TString importName, ptNameSet, eventsNameSet;
+  TString importName, ptNameSet, eventsNameSet, hname;
   TH2D* leadJetPt[nPtBins];
   TH1D* ppjetEvents[nPtBins];
     
@@ -25,6 +25,8 @@ void pythia_monojet(){
     importName += l;
     importName += "_";
     importName += h;
+    hname = importName;
+    hname+=".png";
     importName += ".root";
 
     ptNameSet = "Pythia Jets:  ";
@@ -53,6 +55,8 @@ void pythia_monojet(){
       // WRITE
       top->cd();
       leadJetPt[i]->Write();
+      leadJetPt[i]->Save(hname);
+
     }
   }
 
@@ -62,8 +66,10 @@ void pythia_monojet(){
     JetPt->Add(leadJetPt[j]);
   }
 
+  fileSaveName = "pythia_monojet_min_3_GeV.png";
   JetPt->SetTitle(canvasTitle);
   JetPt->Write();
+  JetPt->Save(fileSaveName);
   
   delete top;
 }
