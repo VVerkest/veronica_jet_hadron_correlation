@@ -172,38 +172,34 @@ int main( int argc, char** argv) {
       // Check to see if there are enough jets and if they meet the momentum cuts
       // Monojet analysis: default subJetPtMin to zero (function is independent of subJet Pt)
       if ( !corrAnalysis::CheckHardCandidateJets( analysisType, HiResult, leadJetPtMin, subJetPtMin ) ) 	{ continue; }
-      
-      // count "dijets" ( monojet if doing jet analysis )
-      nHardJets++;
 
       // make our hard dijet vector
       std::vector<fastjet::PseudoJet> hardJets = corrAnalysis::BuildHardJets( analysisType, HiResult );
-      std::vector<fastjet::PseudoJet> LoResult;
-
-      // RETURN HARD JETS
-      std::vector<fastjet::PseudoJet> analysisJets = corrAnalysis::BuildMatchedJets( analysisType, hardJets, LoResult, requireTrigger, triggers, jetRadius );
 
       // if zero jets were returned, exit out
-      if ( analysisJets.size() == 0 )		{ continue; }
-      nMatchedHard++;
-      
+      if ( hardJets.size() == 0 )		{ continue; }
+
+      nHardJets+=hardJets.size();
+
       vertexZBin = VzBin;
 
-       // GEANT/PYTHIA WEIGHTING
+      // GEANT/PYTHIA WEIGHTING
       TString geantFile =  reader.GetInputChain()->GetCurrentFile()->GetName();
       if ( geantFile.Contains("Geant") ){					// determine if data is Geant data
-      	weight= ( corrAnalysis::LookupXsec( geantFile ) )/nMatchedHard;			// weight histograms by xsection
+      	weight= corrAnalysis::LookupXsec( geantFile ) 			// weight histograms by xsection
+	  }
+
+      for ( int j=0; j<hardJets.size(); j++){
+	// FILL PT, ETA, AND PHI FOR MONOJET
+	leadingJet.SetPtEtaPhiE( hardJets.at(j).pt(), hardJets.at(j).eta(), hardJets.at(j).phi_std(), hardJets.at(j).E() );
+	correlatedJets->Fill();      // now write
+
+	histograms->CountEvent( VzBin, weight );      // Now we can fill our event histograms
+	histograms->FillVz( vertexZ, weight );
+	histograms->FillJetPt( hardJets.at(j).pt(), weight );
+	histograms->FillJetEtaPhi( hardJets.at(j).eta(), hardJets.at(j).phi_std(), weight );
       }
       
-      // FILL PT, ETA, AND PHI FOR MONOJET
-      leadingJet.SetPtEtaPhiE( analysisJets.at(0).pt(), analysisJets.at(0).eta(), analysisJets.at(0).phi_std(), analysisJets.at(0).E() );
-      
-      correlatedJets->Fill();      // now write
-
-      histograms->CountEvent( VzBin, weight );      // Now we can fill our event histograms
-      histograms->FillVz( vertexZ, weight );
-      histograms->FillJetPt( analysisJets.at(0).pt(), weight );
-      histograms->FillJetEtaPhi( analysisJets.at(0).eta(), analysisJets.at(0).phi_std(), weight );
     }
   }catch ( std::exception& e) {
     std::cerr << "Caught " << e.what() << std::endl;
