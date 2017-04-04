@@ -39,8 +39,8 @@ void pythia_monojet(){
     leadJetPt[i] = (TH2D*) ppjetFILE->Get("pptriggerjetpt");
     ppjetEvents[i] = (TH1D*) ppjetFILE->Get("binvzdist");
     
-    leadJetPt[i]->SetName(ptNameSet);
-    ppjetEvents[i]->SetName(eventsNameSet);
+    leadJetPt[i]->SetTitle(ptNameSet);
+    ppjetEvents[i]->SetTitle(eventsNameSet);
 
     events = double(ppjetEvents[i]->GetEntries());
 
@@ -49,6 +49,7 @@ void pythia_monojet(){
     if ( events != 0 ) {
       leadJetPt[i]->Scale( 1/events );    // DO NOT divide by zero!
       gStyle->SetOptStat(1);
+
       // WRITE
       top->cd();
       leadJetPt[i]->Write();
