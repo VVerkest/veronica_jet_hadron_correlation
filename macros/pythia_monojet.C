@@ -46,7 +46,7 @@ void pythia_monojet(){
     std::cout << " pt bin range:   " << ptBinString[i] << "              number of events:  " << events << std::endl;
     
     if ( events != 0 ) {
-      //leadJetPt[i]->Scale( 1/events );    // DO NOT divide by zero!
+      leadJetPt[i]->Scale( 1/events );    // DO NOT divide by zero!
       gStyle->SetOptStat(1);
       // WRITE
       top->cd();
