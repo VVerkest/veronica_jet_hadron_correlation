@@ -26,10 +26,8 @@ void pythia_monojet(){
     importName += "_";
     importName += h;
 
-    ptNameSet = importName;
-    ptNameSet += "_pt";
-    eventsNameSet = importName;
-    eventsNameSet += "_events";
+    ptNameSet = "pythiaJet_pt";
+    eventsNameSet = "pythiaJet_events";
     
     importName += ".root";
 
