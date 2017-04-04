@@ -55,7 +55,6 @@ void pythia_monojet(){
       // WRITE
       top->cd();
       leadJetPt[i]->Write();
-      leadJetPt[i]->Save(hname);
 
     }
   }
