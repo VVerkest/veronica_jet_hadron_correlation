@@ -53,7 +53,12 @@ void pythia_monojet(){
   }
 
   TH2D *JetPt = (TH2D*)leadJetPt[0]->Clone("JetPt");
-  JetPt->Add(leadJetPt[1]);
+
+  for (int j=0; j<nPtBins; j++){
+    JetPt->Add(leadJetPt[j]);
+  }
+
+  JetPt->Write();
   
   delete top;
 }
