@@ -29,10 +29,10 @@ void pythia_monojet(){
 
     ptNameSet = "Pythia Jets:  ";
     ptNameSet += ptBinString[i];
-    ptNameSet += " GeV"
+    ptNameSet += " GeV";
     eventsNameSet = "Pythia Events: ";
     eventsNameSet += ptBinString[i];
-    eventsNameSet += " GeV"
+    eventsNameSet += " GeV";
       
     //  IMPORT
     TFile* ppjetFILE = new TFile( importName, "READ" );
