@@ -2,7 +2,7 @@ void pythia_monojet(){
 
   TString fileSaveName = "pythia_monojet_min_3_GeV";
   fileSaveName += ".root";
-  TString canvasTitle = "Pythia Monojet (Min 3 GeV) : ";
+  TString canvasTitle = "Pythia Jets (p_{T} $\geq$ 3.0 GeV)";
   
   // create a new Root file
   TFile *top = new TFile(fileSaveName,"recreate");
@@ -62,6 +62,7 @@ void pythia_monojet(){
     JetPt->Add(leadJetPt[j]);
   }
 
+  JetPt->SetTitle(canvasTitle);
   JetPt->Write();
   
   delete top;
