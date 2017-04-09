@@ -49,7 +49,7 @@ void pythia_monojet(){
     std::cout << " pt bin range:   " << ptBinString[i] << "              number of events:  " << events << std::endl;
     
     if ( events != 0 ) {
-      // leadJetPt[i]->Scale( 1/events );    // DO NOT divide by zero!
+      leadJetPt[i]->Scale( events );    // DO NOT divide by zero!
       gStyle->SetOptStat(1);
 
       // WRITE
@@ -65,6 +65,8 @@ void pythia_monojet(){
     JetPt->Add(leadJetPt[j]);
   }
 
+  events = double(JetPt->GetEntries());
+  JetPt->Scale(1/events);
   JetPt->SetTitle(canvasTitle);
   JetPt->Write();
   
