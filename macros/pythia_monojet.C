@@ -1,6 +1,6 @@
 void pythia_monojet(){
 
-  double_t pi = 3.141592653589793238462643383;
+  double pi = 3.141592653589793238462643383;
   TString fileSaveName = "pythia_monojet_min_3_GeV";
   fileSaveName += ".root";
   TString canvasTitle = "Pythia Jets (pt min: 3.0 GeV)";
