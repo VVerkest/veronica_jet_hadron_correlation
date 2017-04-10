@@ -1,5 +1,6 @@
 void pythia_monojet(){
 
+  double_t pi = 3.141592653589793238462643383;
   TString fileSaveName = "pythia_monojet_min_3_GeV";
   fileSaveName += ".root";
   TString canvasTitle = "Pythia Jets (pt min: 3.0 GeV)";
@@ -50,7 +51,7 @@ void pythia_monojet(){
     std::cout << " pt bin range:   " << ptBinString[i] << "              number of events:  " << events << std::endl;
     
     if ( events != 0 ) {
-      //leadJetPt[i]->Scale( 1/events );    // DO NOT divide by zero!
+      leadJetPt[i]->Scale( 1/(2*pi) );    // DO NOT divide by zero!
       gStyle->SetOptStat(1);
 
       // WRITE
