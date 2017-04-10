@@ -1,8 +1,8 @@
 void pythia_monojet(){
 
-  TString fileSaveName = "UNWEIGHTEDpythia_monojet_min_3_GeV";
+  TString fileSaveName = "pythia_monojet_min_3_GeV";
   fileSaveName += ".root";
-  TString canvasTitle = "Pythia Jets (pt min: 3.0 GeV, UNWEIGHTED)";
+  TString canvasTitle = "Pythia Jets (pt min: 3.0 GeV)";
   
   // create a new Root file
   TFile *top = new TFile(fileSaveName,"recreate");
@@ -20,7 +20,7 @@ void pythia_monojet(){
   TH1D* ppjetEvents[nPtBins];
     
   for (i=0;i<nPtBins;i++) {
-    importName = "out/UNWEIGHTEDpythia_ppjet_lead_3_max_100__";
+    importName = "out/pythia_ppjet_lead_3_max_100__";
     l = ptBinLo[i];
     h = ptBinHi[i];
     importName += l;
@@ -30,10 +30,10 @@ void pythia_monojet(){
     hname+=".png";
     importName += ".root";
 
-    ptNameSet = "Pythia Jets:  (UNWEIGHTED)";
+    ptNameSet = "Pythia Jets:  ";
     ptNameSet += ptBinString[i];
     ptNameSet += " GeV";
-    eventsNameSet = "Pythia Events:  (UNWEIGHTED)";
+    eventsNameSet = "Pythia Events: ";
     eventsNameSet += ptBinString[i];
     eventsNameSet += " GeV";
       
@@ -71,7 +71,7 @@ void pythia_monojet(){
   JetPt->SetTitle(canvasTitle);
   JetPt->Write();
   JetPt->Draw();
-  hname = "UNWEIGHTEDpythia_monojet_min_3_GeV.png";
+  hname = "pythia_monojet_min_3_GeV.png";
   c1->SaveAs(hname);  
   delete top;
 }

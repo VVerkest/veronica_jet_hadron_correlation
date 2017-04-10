@@ -32,7 +32,7 @@
     endif
 
     # Create the folder name for output
-    set outFile = UNWEIGHTEDpythia_${analysis}_lead_${leadPtMin}_max_${jetPtMax}
+    set outFile = pythia_${analysis}_lead_${leadPtMin}_max_${jetPtMax}
     # Make the directories since they may not exist...
     if ( ! -d out/${outFile} ) then
     mkdir -p out/${outFile}
