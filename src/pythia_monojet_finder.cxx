@@ -189,12 +189,12 @@ int main( int argc, char** argv) {
       	weight= corrAnalysis::LookupXsec( geantFile ); 			// weight histograms by xsection
       }
 
+      	histograms->CountEvent( VzBin, weight );      // Now we can fill our event histograms
+
       for ( int j=0; j<hardJets.size(); j++){
 	// FILL PT, ETA, AND PHI FOR MONOJET
 	leadingJet.SetPtEtaPhiE( hardJets.at(j).pt(), hardJets.at(j).eta(), hardJets.at(j).phi_std(), hardJets.at(j).E() );
 	correlatedJets->Fill();      // now write
-
-	histograms->CountEvent( VzBin, weight );      // Now we can fill our event histograms
 	histograms->FillVz( vertexZ, weight );
 	histograms->FillJetPt( hardJets.at(j).pt(), weight );
 	histograms->FillJetEtaPhi( hardJets.at(j).eta(), hardJets.at(j).phi_std(), weight );
