@@ -56,7 +56,7 @@ void pythia_monojet(){
       top->cd();
       leadJetPt[i]->Write();
       leadJetPt[i]->Draw();
-      gpad->SetLogy();
+      c1->SetLogy();
       c1->SaveAs(hname);
     }
   }
@@ -70,7 +70,7 @@ void pythia_monojet(){
   JetPt->SetTitle(canvasTitle);
   JetPt->Write();
   JetPt->Draw();
-  gpad->SetLogy();
+  c1->SetLogy();
   hname = "pythia_monojet_min_3_GeV.png"
   c1->SaveAs(hname);  
   delete top;
