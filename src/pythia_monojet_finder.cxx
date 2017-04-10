@@ -13,7 +13,7 @@ int main( int argc, char** argv) {
   bool requireTrigger= false; // require leading jet to be within jetRadius of a trigger tower
   double leadJetPtMin  = 20.0; // leading jet minimum pt requirement
   double jetPtMax = 100.0;  // maximum jet pt
-  double jetRadius = 0.4; // jet radius for jet finding
+  double jetRadius = 0.7; // jet radius for jet finding
   std::string outputDir = "tmp/";                         // directory where everything will be saved
   double subJetPtMin  = 0.0; // no subjet minimum pt requirement
   std::string chainName = "JetTreeMc";            // Tree name in INPUT file

@@ -100,7 +100,7 @@ namespace corrAnalysis {
   const double 	phiHighEdge = 3.0*pi/2.0;	// upper edge for accepted phi range
   
   // Eta binning
-  const int		 binsEta = 27;							// number of eta bins
+  const int binsEta = 27;							// number of eta bins
   const double etaLowEdge = -1;						// lower edge for accepted eta range
   const double etaHighEdge = 1;						// upper edge for accepted phi range
   const double dEtaLowEdge = 2*etaLowEdge;		// lower edge for accepted dEta range
@@ -111,10 +111,10 @@ namespace corrAnalysis {
   // (Jet Pt min/max are set in the analysis)
   const double jetPtHardMax = 1000.0;   	// for consistency, used when no max is needed
   
-  const double jetRadius = 0.4;
+  const double jetRadius = 0.7;
   
   // Constituent parameters used in jet selection
-  const double maxTrackRap 	= 1.0;				// accept tracks with rapidity [ -1, 1 ]
+  const double maxTrackRap 	= 1.5;				// accept tracks with rapidity [ -1, 1 ]
   const double trackMinPt  	= 0.2;				// only accept tracks with Pt > 0.2
   const double hardTrackMinPt   = 0.2;			// hard jets clustered with pt > 2.0
   
