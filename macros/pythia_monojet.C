@@ -53,7 +53,7 @@ void pythia_monojet(){
     if ( events != 0 ) {
       leadJetPt[i]->Scale( 1/(2*pi) );    // DO NOT divide by zero!
       leadJetPt[i]->Scale( 1/(3) );
-      //leadJetPt[i]->Scale( 1/(leadJetPt[i]->GetXaxis()->GetBinWidth(1)) );
+      leadJetPt[i]->Scale( 1/(leadJetPt[i]->GetXaxis()->GetBinWidth(1)) );
       gStyle->SetOptStat(1);
 
       // WRITE
