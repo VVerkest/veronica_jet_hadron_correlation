@@ -101,8 +101,8 @@ namespace corrAnalysis {
   
   // Eta binning
   const int binsEta = 27;							// number of eta bins
-  const double etaLowEdge = -1.5;						// lower edge for accepted eta range
-  const double etaHighEdge = 1.5;						// upper edge for accepted phi range
+  const double etaLowEdge = -1;						// lower edge for accepted eta range
+  const double etaHighEdge = 1;						// upper edge for accepted phi range
   const double dEtaLowEdge = 2*etaLowEdge;		// lower edge for accepted dEta range
   const double dEtaHighEdge = 2*etaHighEdge; 	// upper edge for accepted dEta range
   
