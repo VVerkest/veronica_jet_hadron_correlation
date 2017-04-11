@@ -50,6 +50,7 @@ void pythia_monojet(){
 
     std::cout << " pt bin range:   " << ptBinString[i] << "              number of events:  " << events << std::endl;
     
+    if ( events != 0 ) {
       leadJetPt[i]->Scale( 1/(2*pi) );    // DO NOT divide by zero!
       leadJetPt[i]->Scale( 1/(3) );
       //leadJetPt[i]->Scale( 1/(leadJetPt[i]->GetXaxis()->GetBinWidth(1)) );
@@ -61,6 +62,7 @@ void pythia_monojet(){
       leadJetPt[i]->Draw();
       c1->SetLogy();
       c1->SaveAs(hname);
+    }
   }
 
   TH2D *JetPt = (TH2D*)leadJetPt[0]->Clone("JetPt");
